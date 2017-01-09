@@ -31,34 +31,38 @@ public class BiografieParser {
     }
     
     public static void BufferedStream() throws IOException{
+        //de regex voor biography.list
         Pattern p = Pattern.compile("^NM: (.+)|^RN: (.+)|^HT: (.+)|^DB:\\s([^,]*)(?:\\,\\s(.*))?|^DD:(.*?)(?:,|$)(.*?)(?:\\((.*)\\)|$)");
         
+        //naar deze csv file wordt de output geschreven
         BufferedWriter fw = new BufferedWriter(new FileWriter("biography.cvs"));
+        
+        //de eerste regel in de csv file
         List<String> columns = Arrays.asList("Name", "Real name", "Height", "Date birth", "Location", "Date death", "Location", "Reason");
         String listString = "";
         
+        //elk item wordt geschijden door een | (pipeline)
         for (String s : columns)
         {
-            listString += s + ";";
+            listString += s + "|";
         }
         
+        //een enter na een row
         fw.write(listString + "\n");
         
-		boolean first = false;
-		List<String> row = new ArrayList<String>();
+        boolean first = false;
+        List<String> row = new ArrayList<String>();
         
-        try(BufferedReader br = new BufferedReader(new FileReader("biographies.list"))) {
-            for(String line; (line = br.readLine()) != null; ) {
+        try(BufferedReader br = new BufferedReader(new FileReader("biographies.list"))) 
+        {
+            for(String line; (line = br.readLine()) != null; ) 
+            {
                 Matcher m = p.matcher(line);
                  
+                //als hij een match heeft met de regex, dan gaat hij deze if binnnen
                 if (m.find()) 
-                {
-                    if (!first){
-                            first = true;
-                            for (int i = 0; i <= 7; i++){
-                                    row.add("null");
-                            }
-                    }
+                {                    
+                    //voor alle 8 groepen kijken of hij niet leeg is en niet null, zo ja, dan zet hij de data op de goede plek in de row
                     for (int i = 1; i <= 8; i++)
                     {
                         if (!"".equals(m.group(i)) && m.group(i) != null)
@@ -66,22 +70,53 @@ public class BiografieParser {
                             row.set(i-1, m.group(i));
                         }
                     }                    
-                 }else{
-                    if (first && line.contains("--------------------")){                      
-                        listString = "";
+                 }
+                
+                //als de regex niet meer een match heeft, dan deze else binnen
+                else
+                {
+                    //als de lijn bestaat uit --- (einde van een biografie), deze if binnen
+                    if (line.contains("--------------------"))
+                    {  
+                        //als de eerste geweest is
+                        if(first)
+                        {
+                            //de string leeg maken
+                            listString = "";
+
                             for (String s : row)
                             {
-                                    listString += s + ";";
+                                // het trimmen van alle data 
+                                s = s.trim();
+
+                                //data scheiden met een pipeline
+                                listString += s + "|";
                             }
+
+                            //aan het einde van de regel een enter toevoegen
                             fw.write(listString + "\n");
-                            row = new ArrayList<String>();
-                            for (int i = 0; i <= 7; i++){
-                                    row.add("null");
-                            }
-                     }
-             }   
+                        }
+                        
+                        //als de eerste --- is geweest, deze op true zetten om een lege row te voorkomen
+                        else
+                        {
+                            first = true;
+                        }
+
+                        //de rij leeg maken
+                        row = new ArrayList<String>();
+
+                        //de rij vullen met null's
+                        for (int i = 0; i <= 7; i++)
+                        {
+                                row.add("null");
+                        }
+                    }
+                }   
             }
         }
+        
+        //bufferwriter afsluiten
         fw.close();
     }
     
