@@ -5,16 +5,16 @@ import javafx.util.Pair;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class PatternSet {
+abstract class PatternSet {
 
-    private Pattern _pattern;
+    final private Pattern _pattern;
 
     PatternSet(String pattern)
     {
         _pattern = Pattern.compile(pattern);
     }
 
-    protected abstract Object process(String input, Matcher matcher);
+    protected abstract Object process(@SuppressWarnings("UnusedParameters") String input, Matcher matcher);
 
     Pair<Boolean, Object> match(String input)
     {

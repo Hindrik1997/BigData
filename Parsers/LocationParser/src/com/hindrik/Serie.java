@@ -2,10 +2,11 @@ package com.hindrik;
 
 import java.util.Objects;
 
-public class Serie {
+class Serie {
 
     private String _title = "null";
     private String _yearOfRelease = "null";
+    private String _quarter = "null";
     private String _episodeName = "null";
     private String _seasonNr = "null";
     private String _episodeNr = "null";
@@ -19,6 +20,12 @@ public class Serie {
         this._yearOfRelease = _yearOfRelease.trim();
         if(this._yearOfRelease.isEmpty() || (Objects.equals(this._yearOfRelease, "????")))
             this._yearOfRelease = "null";
+    }
+
+    void set_quarter(String _quarter) {
+        this._quarter = _quarter.trim();
+        if(this._quarter.isEmpty())
+            this._quarter = "null";
     }
 
     void set_episodeName(String _episodeName) {
@@ -47,6 +54,6 @@ public class Serie {
 
     @Override
     public String toString() {
-        return _title + "|" + _yearOfRelease + "|" + _episodeName + "|" + _seasonNr + "|" + _episodeNr + "|" + _location;
+        return _title + "|" + _yearOfRelease + "|" + _quarter + "|" + _episodeName + "|" + _seasonNr + "|" + _episodeNr + "|" + _location;
     }
 }
