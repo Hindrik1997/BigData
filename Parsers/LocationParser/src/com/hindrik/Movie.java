@@ -2,10 +2,11 @@ package com.hindrik;
 
 import java.util.Objects;
 
-public class Movie {
+class Movie {
 
     private String _title = "null";
     private String _yearOfRelease = "null";
+    private String _quarter = "null";
     private String _medium = "null";
     private String _state = "null";
     private String _location = "null";
@@ -18,6 +19,12 @@ public class Movie {
         this._yearOfRelease = _yearOfRelease.trim();
         if(this._yearOfRelease.isEmpty() || (Objects.equals(this._yearOfRelease, "????")))
             this._yearOfRelease = "null";
+    }
+
+    void set_quarter(String _quarter) {
+        this._quarter = _quarter.trim();
+        if(this._quarter.isEmpty())
+            this._quarter = "null";
     }
 
     void set_medium(String _location) {
@@ -40,7 +47,7 @@ public class Movie {
 
     @Override
     public String toString() {
-        return _title + "|" + _yearOfRelease + "|" + _medium + "|" + _state + "|" + _location;
+        return _title + "|" + _yearOfRelease + "|" + _quarter + "|" + _medium + "|" + _state + "|" + _location;
     }
 
 }

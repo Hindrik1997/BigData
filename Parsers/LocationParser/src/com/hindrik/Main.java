@@ -2,20 +2,24 @@ package com.hindrik;
 
 import javafx.util.Pair;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class Main {
+class Main {
 
     private static BufferedWriter seriesOutput = null;
     private static BufferedWriter moviesOutput = null;
-    private static List<PatternSet> seriePatterns = new ArrayList<>();
-    private static List<PatternSet> moviePatterns = new ArrayList<>();
+    final private static List<PatternSet> seriePatterns = new ArrayList<>();
+    final private static List<PatternSet> moviePatterns = new ArrayList<>();
     private static boolean display = false;
 
     public static void main(String[] args) {
@@ -44,7 +48,7 @@ public class Main {
         }
 
         try {
-            seriesOutput.write("Title,Year of release,Episode title,Season nr,Episode nr,Location");
+            seriesOutput.write("Title|Year of release|Quarter|Episode title|Season nr|Episode nr|Location");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +60,7 @@ public class Main {
         }
 
         try {
-            moviesOutput.write("Title,Year of release,Medium,State,Location");
+            moviesOutput.write("Title|Year of release|Quarter|Medium|State|Location");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,19 +81,16 @@ public class Main {
 
     private static void setupRegex()
     {
-        seriePatterns.add(new SerieSeasonSupportPattern());
-        seriePatterns.add(new SerieNoSeasonSupportPattern());
-        moviePatterns.add(new MoviePlatformSuspendedPattern());
-        moviePatterns.add(new MoviePlatformNotSuspendedPattern());
-        moviePatterns.add(new MovieNoPlatformNotSuspendedPattern());
+        seriePatterns.add(new SeriePattern());
+        moviePatterns.add(new MoviePattern());
     }
 
-    static void processLocation(String string) {
+    private static void processLocation(String string) {
         process(string, seriePatterns, seriesOutput);
         process(string, moviePatterns, moviesOutput);
     }
 
-    static void process(String string, List<PatternSet> patternSet, BufferedWriter output)
+    private static void process(String string, List<PatternSet> patternSet, BufferedWriter output)
     {
         for(PatternSet pattern : patternSet)
         {
