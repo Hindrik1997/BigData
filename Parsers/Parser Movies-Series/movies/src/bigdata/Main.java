@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
 
+
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
@@ -21,17 +22,17 @@ public class Main {
 
     public static void BufferedStream() throws IOException {
 
-        Pattern rSeries = Pattern.compile("(?:\\\")([^\\\"]+)(?:\\\")(?:[\\s]*(?:\\())(\\d{4})(?:\\/)?([IVXCM]*)?(?:\\)?[\\s]*)(?:\\{)+(?:(?:([^\\}]*)(?:\\()(?:#)?([^\\)]*)\\))*)(?:\\})+(?:[\\s]*)(\\{\\{[\\S]*\\}\\})?(?:[\\s]*)(\\d{4})?(?:.*)");
+        Pattern rSeries = Pattern.compile("(?:\\\")([^\\\"]+)(?:\\\")(?:[\\s]*(?:\\())(\\d{4})(?:\\/)?([IVXCM]*)?(?:\\)?[\\s]*)(?:(?:\\{)+(?:(?:([^\\}]*)(?:\\()(?:#)?([^\\)]*)\\))*)(?:\\})+)?(?:[\\s]*)(\\{\\{[\\S]*\\}\\})?(?:[\\s]*)(\\d{4})?(?:.*)");
         Pattern rMovies = Pattern.compile("([^\\\"]+)\\s(?:(?:\\())(\\d{4})(?:\\/)?([IVXCM]*)?(?:\\)?)(?:\\s*(?:\\()([TV]*)?(?:\\)))?(?:(?:[\\s]*)(\\{\\{[\\S]*\\}\\})?)(?:.*)?");
 
-        Pattern episodeDate = Pattern.compile("(\\d\\d\\d\\d)(\\-)(\\d\\d)(\\-)(\\d\\d)");
-        Pattern episodeSeason = Pattern.compile("([0-9]+)(?:\\.)([0-9]+)");
+        Pattern rEpisodeDate = Pattern.compile("(\\d\\d\\d\\d)(\\-)(\\d\\d)(\\-)(\\d\\d)");
+        Pattern rEpisodeSeason = Pattern.compile("([0-9]+)(?:\\.)([0-9]+)");
 
         BufferedWriter fws = new BufferedWriter(new FileWriter("series.csv"));
         BufferedWriter fwm = new BufferedWriter(new FileWriter("movies.csv"));
 
-        List<String> seriecolumns = Arrays.asList("Title", "SerieStarted", "Quarter", "EpisodeName", "EpisodeDate", "SeasonNr", "EpisodeNr", "EpisodeYear", "Suspended");
-        List<String> moviecolumns = Arrays.asList("Title", "Year", "Quarter", "Medium", "Suspended");
+        List<String> seriecolumns = Arrays.asList("Title", "SerieStarted", "Quarter", "EpisodeName", "EpisodeDate", "SeasonNr", "EpisodeNr", "EpisodeYear", "State");
+        List<String> moviecolumns = Arrays.asList("Title", "Year", "Quarter", "Medium", "State");
         String listString = "";
 
         for (String s : seriecolumns)
@@ -58,22 +59,19 @@ public class Main {
                 if(ms.find()){
                     List<String> row = new ArrayList<String>();
 
-                    row.add(ms.group(1));
-                    row.add(ms.group(2));
-
-                    if ("".equals(ms.group(3))){
-                        row.add("null");
-                    }else{
-                        row.add(ms.group(3));
+                    for(int i=1;i<4;i++){
+                        if ("".equals(ms.group(i))) row.add("null");
+                        else row.add(ms.group(i));
                     }
-                        if ("".equals(ms.group(4))){
-                            row.add("null");
-                        }else{
-                            row.add(ms.group(4));
-                        }
+
+                    if(ms.group(4)!= null)
+                    {
+                        if ("".equals(ms.group(4))) row.add("null");
+                        else row.add(ms.group(4));
+
                         if(ms.group(5) != null){
-                            Matcher mDate = episodeDate.matcher(ms.group(5).toString());
-                            Matcher mSeason = episodeSeason.matcher(ms.group(5).toString());
+                            Matcher mDate = rEpisodeDate.matcher(ms.group(5).toString());
+                            Matcher mSeason = rEpisodeSeason.matcher(ms.group(5).toString());
 
                             if(mDate.find()){
                                 row.add(mDate.group(0));
@@ -85,24 +83,28 @@ public class Main {
                                 row.add(mSeason.group(1));
                                 row.add(mSeason.group(2));
                             }
-                            else { for(int i=0;i<3;i++){row.add("null");} }
                         }
                         else { for(int i=0;i<3;i++){row.add("null");} }
 
-                        String suspended = "";
+                        String state = "null";
                         if(ms.group(6)!=null){
-                            suspended =  "true";
+                            state =  "Suspended";
                         }
-                        else {
-                            suspended = "false";
-                        }
-                        if("".equals(ms.group(7))){
-                            row.add("null");
-                        }
-                        else{
-                            row.add(ms.group(7));
-                        }
-                        row.add(suspended);
+                        if("".equals(ms.group(7))) row.add("null");
+                        else row.add(ms.group(7));
+
+                        row.add(state);
+                    }
+
+                    else {
+                        for(int i=4;i<7;i++)row.add("null");
+
+                        if("".equals(ms.group(7))) row.add("null");
+                        else row.add(ms.group(7));
+
+                        if(ms.group(6) != null) row.add("Suspended");
+                        else row.add("null");
+                    }
 
 
                     for (String s : row)
@@ -112,19 +114,16 @@ public class Main {
 
                     fws.write(listString + "\n");
                 }
-                else if (mm.find() && !(line.contains("\""))) {
+                else if (mm.find() && !(line.startsWith("\""))) {
                     List<String> row = new ArrayList<String>();
 
                     for (int i = 1; i <= 4; i++){
-                        if ("".equals(mm.group(i))){
-                            row.add("null");
-                        }else{
-                            row.add(mm.group(i));
-                        }
+                        if ("".equals(mm.group(i))) row.add("null");
+                        else row.add(mm.group(i));
                     }
 
-                    if(mm.group(5) != null) row.add("true");
-                    else row.add("false");
+                    if(mm.group(5) != null) row.add("Suspended");
+                    else row.add("null");
 
                     for (String s : row)
                     {
