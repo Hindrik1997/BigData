@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gerneparser;
+package genreparser;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
  *
  * @author Romeo
  */
-public class GerneParser {
+public class GenreParser {
 
     /**
      * @param args the command line arguments
