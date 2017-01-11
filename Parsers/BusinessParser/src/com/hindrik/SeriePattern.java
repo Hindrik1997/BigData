@@ -2,12 +2,22 @@ package com.hindrik;
 
 import java.util.regex.Matcher;
 
+/**
+ * Pattern for searching through series in locations.list
+ */
 class SeriePattern extends PatternSet {
 
     SeriePattern() {
         super("(?:[\\d+\\.*]{10})\\s*(\\d+)\\s*(?:(\\d)\\.(\\d))\\s*(?:([\"].*[\"]))\\s*(?:\\((\\d{4}|\\?{4})(?:\\/([IVXCM]*))?\\))\\s*(?:\\{(.*)\\s*\\(#(\\d*)\\.(\\d*)\\)\\})?");
     }
 
+    /**
+     * Overriden function.See the base class.
+     * @see SeriePattern#process(String, Matcher)
+     * @param input input string to match
+     * @param matcher input matcher
+     * @return a pair of bool and a serie object.
+     */
     @Override
     protected Object process(String input, Matcher matcher) {
         Serie s = new Serie();

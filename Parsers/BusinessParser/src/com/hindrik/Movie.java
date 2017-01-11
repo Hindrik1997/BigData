@@ -2,6 +2,10 @@ package com.hindrik;
 
 import java.util.Objects;
 
+/**
+ * Wrapper class for the data of a movie. Provides "null" in case a movie doesn't have the specified attribute.
+ * Overrides the toString()
+ */
 class Movie {
 
     private String _title = "null";
@@ -53,6 +57,10 @@ class Movie {
             this._medium = "null";
     }
 
+    /**
+     * Override for the tostring method for text representation of the object.
+     * @return Text representation of the movie.
+     */
     @Override
     public String toString() {
         return _title + "|" + _yearOfRelease + "|" + _quarter + "|" + _medium + "|" + _ratingMajor + "|" + _ratingMinor + "|" + _voters;

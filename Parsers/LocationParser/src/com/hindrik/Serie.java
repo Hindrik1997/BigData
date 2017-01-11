@@ -2,6 +2,10 @@ package com.hindrik;
 
 import java.util.Objects;
 
+/**
+ * Wrapper class for the data of a serie. Provides "null" in case a serie doesn't have the specified attribute.
+ * Overrides the toString()
+ */
 class Serie {
 
     private String _title = "null";
@@ -52,6 +56,10 @@ class Serie {
             this._location = "null";
     }
 
+    /**
+     * Override for the tostring method for text representation of the object.
+     * @return Text representation of the serie.
+     */
     @Override
     public String toString() {
         return _title + "|" + _yearOfRelease + "|" + _quarter + "|" + _episodeName + "|" + _seasonNr + "|" + _episodeNr + "|" + _location;
