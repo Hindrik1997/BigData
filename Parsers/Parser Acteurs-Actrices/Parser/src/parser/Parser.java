@@ -27,112 +27,91 @@ public class Parser {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        BufferedStream();
+        //nieuwe buffered writer aanmaken.
+        BufferedWriter fw = new BufferedWriter(new FileWriter("actors.csv"));
+        
+        //kolommen
+        List<String> columns = Arrays.asList("name", "movie", "serie", "year", "quarter", "state", "episode date", "episode name", "season", "episode", "platform", "voice", "credited as", "character name", "billing position", "gender");
+        String listString = "";
+        
+        //kolommen in 1 string zetten.
+        for (String s : columns)
+        {
+            listString += s + "|";
+        }
+        
+        //kolommen naar file schrijven
+        fw.write(listString + "\n");
+        
+        parseActors(fw, "actors", "m");     //mannen    (male)
+        parseActors(fw, "actresses", "f");  //vrouwen   (female)
+        
+        fw.close();
     }
     
-    public static void BufferedStream() throws IOException{
-        Pattern r = Pattern.compile("^(.*?)\\t(.*?)\\((.{4})\\)?(?:\\s*\\{([\\w!\\s:;\\/\\.\\-\\'”?`_&@$%^*<>~+=\\|\\,\\(\\)]*)(?:\\s*\\(#([\\d]*)\\.([\\d]*)\\))?})?(?:\\s*\\((.*?)\\))?(?:\\s*\\((.*?)\\))?(?:\\s*\\[(.*?)\\])?(?:\\s*\\<(.*?)\\>)?");
+    public static void parseActors(BufferedWriter fw, String nameFile, String gender) throws IOException{
+        //belangrijke informatie uit lijn in groups zetten
+        Pattern p = Pattern.compile("^(.*?)\\t(.*?)\\((?:(\\d{4})|\\?{4})(?:\\/(.*?)?\\))?\\)?(?:\\s*\\{\\{(SUSPENDED)}})?(?:\\s*\\{(?:(?:\\((\\d{4}\\-\\d{2}\\-\\d{2})\\))|(.*?))(?:\\s*\\(#([\\d]*)\\.([\\d]*)\\))?})?(?:\\s*\\((V|TV|VG)\\))?(?:\\s*\\((voice)\\))?(?:\\s*\\((as.*?)\\))?(?:\\s*\\[(.*?)\\])?(?:\\s*\\<(.*?)\\>)?");
+        //Regex om te kijken of het een serie is.
+        Pattern isSerie = Pattern.compile("^\"(.*)\"$");
         
-        BufferedWriter fw = new BufferedWriter(new FileWriter("C:/Users/jacob/stack/nhl/jaar2/Project Big Data/parsed content/actors.csv"));
-        List<String> columns = Arrays.asList("name", "Movie/serie", "year", "Eps Name", "season", "episode", "voice", "credited as", "charcacter name", "billing position", "v or tv");
-        Boolean addV = false;
-        Boolean addTV = false;
-        Boolean addAS = false;
         String prevName = "";
         String listString = "";
 
-        for (String s : columns)
-        {
-            listString += s + ";";
-        }
-        
-        fw.write(listString + "\n");
-        
-        try(BufferedReader br = new BufferedReader(new FileReader("C:/Users/jacob/stack/nhl/jaar2/Project Big Data/actors.list"))) {
+        //probeer de file te vinden en te lezen. Als dat niet leuk naar de catch.
+        try(BufferedReader br = new BufferedReader(new FileReader(nameFile + ".list"))) {
+            //nieuwe lijn uit de file halen.
             for(String line; (line = br.readLine()) != null; ) {
-                listString = "";
-                addV = false;
-                addTV = false;
-                addAS = false;
-                Matcher m = r.matcher(line);
                 
-                if (m.find()) {
-                    List<String> row = new ArrayList<String>(); 
-                    
-                    if("".equals(m.group(1))) row.add(prevName);
-                    else{
-                        row.add(m.group(1));
-                        prevName = m.group(1);
-                    }
-                    
-                     for (int i = 2; i <= 6; i++){
-                         if ("".equals(m.group(i))){
-                                row.add("null");
-                            }else{
-                                row.add(m.group(i));
-                            } 
-                     }
-                    
-                     if ("voice".equals(m.group(7))){
-                         row.add(m.group(7));
-                     }else{
-                         row.add("null");
-                         if ("V".equals(m.group(7))){
-                                addV = true;
-                            }else if ("TV".equals(m.group(7))){
-                                addTV = true;
-                            } 
-                            else {
-                                addAS = true;
-                            }
-                     }
-                     
-                     if (addAS){
-                        row.add(m.group(7));
-                        if ("V".equals(m.group(8))){
-                           addV = true;
-                        }else if ("TV".equals(m.group(8))){
-                            addTV = true;
-                        } 
-                     }else{
-                         if ("V".equals(m.group(8))){
-                                row.add("null");
-                                addV = true;
-                            }else if ("TV".equals(m.group(8))){
-                                row.add("null");
-                                addTV = true;
-                            }
-                            else if ("".equals(m.group(8))){
-                                row.add("null");
-                            }else{
-                                row.add(m.group(8));
-                            }
-                     }
-                     
-                     for (int i = 9; i <= 10; i++){
-                         if ("".equals(m.group(i))){
-                                row.add("null");
-                            }else{
-                                row.add(m.group(i));
-                            } 
-                     }
-                     
-                    if (addV) row.add("V");
-                    else if (addTV) row.add("TV");
-                    else row.add("null");
+                Matcher m = p.matcher(line);
+                List<String> row = new ArrayList<String>();
+                 
+                if (m.find()){
+                   //als de naam leeg is het dezelfde acteur als ervoor;
+                   if("".equals(m.group(1))) row.add(prevName);
+                   else{
+                       //nieuwe naam van acteur
+                       row.add(m.group(1));
+                       prevName = m.group(1);
+                   }
 
-                    for (String s : row)
-                    {
-                        listString += s + ";";
-                    }
+                   //matchen of het een film of serie is.
+                   Matcher isS = isSerie.matcher(m.group(2).trim());
 
-                    fw.write(listString + "\n");
+                   //als de regex een match heeft is het een serie
+                   if (isS.find()){
+                       row.add("null");        //film
+                       row.add(isS.group(1)); //serie
+                   }else{
+                       row.add(m.group(2));    //film
+                       row.add("null");        //serie
+                   }
+
+                   for (int i = 3; i <= 14; i++){
+                       if ("".equals(m.group(i))){
+                              row.add("null");
+                          }else{
+                              row.add(m.group(i));
+                          } 
+                   }
+                   
+                   listString = "";
+                   
+                   //row in 1 string zetten.
+                   for (String s : row)
+                   {
+                       if (s != null){
+                           s = s.trim(); //onnodige spaties etc. weghalen.
+                       }
+                       listString += s + "|";
+                   }
+
+                   //row in file zetten.
+                   fw.write(listString + gender+ "|\n");
                 }
             }
-    }catch (Exception x){
-        
+        }catch (Exception x){
+            x.printStackTrace();
+        }
     }
-        fw.close();
-}
-    
 }
