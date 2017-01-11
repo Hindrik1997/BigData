@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * Main class of the application
+ */
 class Main {
 
     private static BufferedWriter seriesOutput = null;
@@ -24,6 +27,15 @@ class Main {
     private static boolean start = false;
     private static String startString = null;
 
+    /**
+     * Entry point of the application
+     * @param args commandline inputs.
+     *             args[0]: file to parse,
+     *             args[1]: series output file,
+     *             args[2]: movies output file,
+     *             args[3]: String to start comparisons after,
+     *             args[4] (optional): "display" if you need output to the outputstream
+     */
     public static void main(String[] args) {
 
         if(args.length < 4)
@@ -83,12 +95,19 @@ class Main {
 
     }
 
+    /**
+     * Sets up the regex patterns for the series and movies respectively
+     */
     private static void setupRegex()
     {
         seriePatterns.add(new SeriePattern());
         moviePatterns.add(new MoviePattern());
     }
 
+    /**
+     * Processes the string for the selected output and pattern
+     * @param string input string
+     */
     private static void processLocation(String string) {
 
         if(start || Objects.equals(string, startString))
@@ -99,6 +118,12 @@ class Main {
         }
     }
 
+    /**
+     * Performs the actual processing of the input string based on the arguments provided
+     * @param string input string
+     * @param patternSet the set of patterns to test for
+     * @param output output writer
+     */
     private static void process(String string, List<PatternSet> patternSet, BufferedWriter output)
     {
         for(PatternSet pattern : patternSet)
