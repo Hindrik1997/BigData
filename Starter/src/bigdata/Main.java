@@ -33,8 +33,8 @@ class Task implements Runnable
 public class Main
 {
     public static void main(String args[]) {
-        final List<String> commands = Arrays.asList("java -jar MovieParser.jar", "java -jar DataParser.jar locations.list locationseries.csv locationmovies.csv",
-                "java -jar BusinessParser.jar ratings.list ratingseries.csv ratingmovies.csv \"MOVIE RATINGS REPORT\"", "java -jar BiografieParser.jar",
+        final List<String> commands = Arrays.asList("java -jar MovieParser.jar", "java -jar LocationParser.jar locations.list locationseries.csv locationmovies.csv",
+                "java -jar RatingParser.jar ratings.list ratingseries.csv ratingmovies.csv \"MOVIE RATINGS REPORT\"", "java -jar BiografieParser.jar",
                 "java -jar ActorsParser.jar", "java -jar GenreParser.jar");
         List<Thread> threads = new ArrayList<>();
         for (String s : commands) {
