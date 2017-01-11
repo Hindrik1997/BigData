@@ -26,11 +26,11 @@ public class Main {
 
     public static void BufferedStream() throws IOException {
 
-        Pattern rSeries = Pattern.compile("(?:\\\")([^\\\"]+)(?:\\\")(?:[\\s]*(?:\\())(\\d{4}|\\?{4})(?:\\/)?([IVXCM]+)?(?:\\)?[\\s]*)(?:(?:\\{)+(?:(?:([^\\}]*)(?:\\()(?:#)?([^\\)]*)\\))*)(?:\\})+)?(?:[\\s]*)(\\{\\{[\\S]*\\}\\})?(?:[\\s]*)(\\d{4}|\\?{4})?(?:.*)");
-        Pattern rMovies = Pattern.compile("([^\\\"]+)\\s(?:(?:\\())(\\d{4}|\\?{4})(?:\\/)?([IVXCM]+)?(?:\\)?)(?:\\s*(?:\\()([TVG]+)?(?:\\)))?(?:(?:[\\s]*)(\\{\\{[\\S]*\\}\\})?)(?:.*)?");
+        Pattern rSeries = Pattern.compile("\\\"([^\\\"]+)\\\"(?:\\s*\\()(\\d{4}|\\?{4})\\/?([IVXCM]+)?(?:\\)?\\s*)(?:\\{+(?:(?:([^\\}]*)\\(#?([^\\)]*)\\))*)\\}+)?(?:\\s*)(\\{\\{SUSPENDED\\}\\})?(?:\\s*)(\\d{4}|\\?{4})?.*");
+        Pattern rMovies = Pattern.compile("([^\\\"]+)\\s\\((\\d{4}|\\?{4})\\/?([IVXCM]+)?\\)?(?:\\s*\\(([TVG]+)?\\))?\\s*(\\{\\{SUSPENDED\\}\\})?.*");
 
-        Pattern rEpisodeDate = Pattern.compile("(\\d{4})(\\-)(\\d{2})(\\-)(\\d{2})");
-        Pattern rEpisodeSeason = Pattern.compile("([0-9]+)(?:\\.)([0-9]+)");
+        Pattern rEpisodeDate = Pattern.compile("\\d{4}\\-\\d{2}\\-\\d{2}");
+        Pattern rEpisodeSeason = Pattern.compile("([0-9]+)\\.([0-9]+)");
 
         BufferedWriter fws = new BufferedWriter(new FileWriter("series.csv"));
         BufferedWriter fwm = new BufferedWriter(new FileWriter("movies.csv"));
