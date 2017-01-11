@@ -35,7 +35,7 @@ public class BiografieParser {
         Pattern p = Pattern.compile("^NM: (.+)|^RN: (.+)|^HT: (.+)|^DB:\\s([^,]*)(?:\\,\\s(.*))?|^DD:(.*?)(?:,|$)(.*?)(?:\\((.*)\\)|$)");
         
         //naar deze csv file wordt de output geschreven
-        BufferedWriter fw = new BufferedWriter(new FileWriter("biography.cvs"));
+        BufferedWriter fw = new BufferedWriter(new FileWriter("biography.csv"));
         
         //de eerste regel in de csv file
         List<String> columns = Arrays.asList("Name", "Real name", "Height", "Date birth", "Location", "Date death", "Location", "Reason");
