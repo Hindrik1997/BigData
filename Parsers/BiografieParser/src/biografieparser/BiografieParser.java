@@ -53,6 +53,7 @@ public class BiografieParser {
         boolean first = false;
         List<String> row = new ArrayList<String>();
         
+        //probeerd de file te vinden en te lezen, als dat niet lukt naar de catch
         try(BufferedReader br = new BufferedReader(new FileReader("biographies.list"))) 
         {
             for(String line; (line = br.readLine()) != null; ) 
@@ -114,6 +115,9 @@ public class BiografieParser {
                     }
                 }   
             }
+        }
+        catch (Exception x){
+            x.printStackTrace();
         }
         
         //bufferwriter afsluiten
