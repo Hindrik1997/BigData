@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 public class MoviePattern extends PatternSet{
 
     MoviePattern() {
-        super("([^\"]+)\\s+(?:\\((\\d{4}|\\?{4})(?:\\/([IVXCM]+))?\\))\\s+(?:\\((TV|V)\\))?\\s+(?:\\{\\{(.+)\\}\\})?\\s+(.+)");
+        super("([^\"]+)\\s+(?:\\((\\d{4}|\\?{4})(?:\\/([IVXCM]+))?\\))\\s+(?:\\(([A-Z]+)\\))?\\s+(?:\\{\\{(.+)\\}\\})?\\s+(.+)");
     }
 
     @Override

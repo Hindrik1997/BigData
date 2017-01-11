@@ -2,9 +2,9 @@ package com.hindrik;
 
 import java.util.regex.Matcher;
 
-public class SeriePattern extends PatternSet {
+class SeriePattern extends PatternSet {
 
-    public SeriePattern() {
+    SeriePattern() {
         super("\"(.+)\"\\s+(?:\\((\\d{4}|\\?{4})(?:\\/([IVXCM]+))?\\))\\s+(?:\\{(.+)\\s+\\(#(\\d+)\\.(\\d+)\\)\\})?\\s+(.+)");
     }
 
