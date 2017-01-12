@@ -3,7 +3,7 @@ Om alle parsers in een keer uit te voeren, map starter als project openen en dan
 
 Deze list files moeten in de starter map:
 
-actor.list
+actors.list
 actresses.list
 biographies.list
 genres.list

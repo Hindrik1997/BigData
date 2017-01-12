@@ -39,23 +39,11 @@ public class GenreParser {
         //nieuwe buffered writer aanmaken.
         BufferedWriter fw = new BufferedWriter(new FileWriter("genre.csv"));
         
-        //kolommen
-        List<String> columns = Arrays.asList("movie", "serie", "year", "quarter", "state", "eps name", "season", "episode", "platform", "genre");
-        
         //Bool om te zien wanneer het de genre's beginnen
         boolean start = false;
         
         String prevName = "";
         String listString = "";
-        
-        //kolommen in 1 string zetten.
-        for (String s : columns)
-        {
-            listString += s + "|";
-        }
-        
-        //kolommen naar file schrijven
-        fw.write(listString + "\n");
         
         //probeer de file te vinden en te lezen. Als dat niet lukt naar de catch.
         try(BufferedReader br = new BufferedReader(new FileReader("genres.list"))) {
@@ -97,14 +85,17 @@ public class GenreParser {
                                    row.add(m.group(i));
                                } 
                         }
-
-                        //row in 1 string zetten.
-                        for (String s : row)
+                        
+                        for(int a=0;a<row.size();a++)
                         {
-                            if (s != null){
-                                s = s.trim(); //onnodige spaties etc. weghalen.
+                            if (row.get(a) != null){
+                                listString+= row.get(a).trim();
+                            }else{
+                                listString+= row.get(a);
                             }
-                            listString += s + "|";
+                            
+                            if(a != row.size()-1) listString += "|";
+                            
                         }
 
                         //row in file zetten.

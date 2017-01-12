@@ -37,18 +37,7 @@ public class BiografieParser {
         //naar deze csv file wordt de output geschreven
         BufferedWriter fw = new BufferedWriter(new FileWriter("biography.csv"));
         
-        //de eerste regel in de csv file
-        List<String> columns = Arrays.asList("Name", "Real name", "Height", "Date birth", "Location", "Date death", "Location", "Reason");
         String listString = "";
-        
-        //elk item wordt geschijden door een | (pipeline)
-        for (String s : columns)
-        {
-            listString += s + "|";
-        }
-        
-        //een enter na een row
-        fw.write(listString + "\n");
         
         boolean first = false;
         List<String> row = new ArrayList<String>();
@@ -85,13 +74,16 @@ public class BiografieParser {
                             //de string leeg maken
                             listString = "";
 
-                            for (String s : row)
+                            for(int a=0;a<row.size();a++)
                             {
-                                // het trimmen van alle data 
-                                s = s.trim();
+                                if (row.get(a) != null){
+                                    listString+= row.get(a).trim();
+                                }else{
+                                    listString+= row.get(a);
+                                }
 
-                                //data scheiden met een pipeline
-                                listString += s + "|";
+                                if(a != row.size()-1) listString += "|";
+
                             }
 
                             //aan het einde van de regel een enter toevoegen
