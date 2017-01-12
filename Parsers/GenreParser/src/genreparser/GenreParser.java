@@ -97,14 +97,17 @@ public class GenreParser {
                                    row.add(m.group(i));
                                } 
                         }
-
-                        //row in 1 string zetten.
-                        for (String s : row)
+                        
+                        for(int a=0;a<row.size();a++)
                         {
-                            if (s != null){
-                                s = s.trim(); //onnodige spaties etc. weghalen.
+                            if (row.get(a) != null){
+                                listString+= row.get(a).trim();
+                            }else{
+                                listString+= row.get(a);
                             }
-                            listString += s + "|";
+                            
+                            if(a != row.size()-1) listString += "|";
+                            
                         }
 
                         //row in file zetten.
