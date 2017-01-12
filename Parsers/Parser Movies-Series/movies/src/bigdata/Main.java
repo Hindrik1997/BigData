@@ -36,24 +36,14 @@ public class Main {
         BufferedWriter fwm = new BufferedWriter(new FileWriter("movies.csv"));
 
         // Generate the headers and specify columns for csv files
-        List<String> seriecolumns = Arrays.asList("Title", "SerieStarted", "Quarter", "EpisodeName", "EpisodeDate", "SeasonNr", "EpisodeNr", "EpisodeYear", "State");
-        List<String> moviecolumns = Arrays.asList("Title", "Year", "Quarter", "Medium", "State");
+        String seriecolumns = "Title|SerieStarted|Quarter|EpisodeName|EpisodeDate|SeasonNr|EpisodeNr|EpisodeYear|State";
+        String moviecolumns = "Title|Year|Quarter|Medium|State";
+
+        fws.write(seriecolumns + "\n");
+
+        fwm.write(moviecolumns + "\n");
+
         String listString = "";
-
-        for (String s : seriecolumns)
-        {
-            listString += s + "|";
-        }
-
-        fws.write(listString + "\n");
-        listString = "";
-
-        for (String s : moviecolumns)
-        {
-            listString += s + "|";
-        }
-
-        fwm.write(listString + "\n");
 
         try(BufferedReader br = new BufferedReader(new FileReader("movies.list"))) {
             for(String line; (line = br.readLine()) != null; ) {
@@ -120,10 +110,9 @@ public class Main {
                         else row.add("null");
                     }
 
-
-                    for (String s : row)
-                    {
-                        listString += s + "|";
+                    for(int a=0;a<row.size();a++){
+                        listString+= row.get(a);
+                        if(a != row.size()-1) listString += "|";
                     }
 
                     fws.write(listString + "\n");
@@ -136,16 +125,16 @@ public class Main {
                     List<String> row = new ArrayList<String>();
 
                     for (int i = 1; i <= 4; i++){
-                        if ("".equals(mm.group(i))) row.add("null");
+                        if ("".equals(mm.group(i)) || "????".equals(mm.group(i))) row.add("null");
                         else row.add(mm.group(i));
                     }
 
                     if(mm.group(5) != null) row.add("Suspended");
                     else row.add("null");
 
-                    for (String s : row)
-                    {
-                        listString += s + "|";
+                    for(int a=0;a<row.size();a++){
+                        listString+= row.get(a);
+                        if(a != row.size()-1) listString += "|";
                     }
 
                     fwm.write(listString + "\n");
