@@ -30,18 +30,7 @@ public class Parser {
         //nieuwe buffered writer aanmaken.
         BufferedWriter fw = new BufferedWriter(new FileWriter("actors.csv"));
         
-        //kolommen
-        List<String> columns = Arrays.asList("name", "movie", "serie", "year", "quarter", "state", "episode date", "episode name", "season", "episode", "platform", "voice", "credited as", "character name", "billing position", "gender");
         String listString = "";
-        
-        //kolommen in 1 string zetten.
-        for (String s : columns)
-        {
-            listString += s + "|";
-        }
-        
-        //kolommen naar file schrijven
-        fw.write(listString + "\n");
         
         parseActors(fw, "actors", "m");     //mannen    (male)
         parseActors(fw, "actresses", "f");  //vrouwen   (female)
@@ -107,7 +96,7 @@ public class Parser {
                    }
 
                    //row in file zetten.
-                   fw.write(listString + gender+ "|\n");
+                   fw.write(listString + gender+ "\n");
                 }
             }
         }catch (Exception x){
