@@ -120,10 +120,9 @@ public class Main {
                         else row.add("null");
                     }
 
-
-                    for (String s : row)
-                    {
-                        listString += s + "|";
+                    for(int a=0;a<row.size();a++){
+                        listString+= row.get(a);
+                        if(a != row.size()-1) listString += "|";
                     }
 
                     fws.write(listString + "\n");
@@ -143,9 +142,9 @@ public class Main {
                     if(mm.group(5) != null) row.add("Suspended");
                     else row.add("null");
 
-                    for (String s : row)
-                    {
-                        listString += s + "|";
+                    for(int a=0;a<row.size();a++){
+                        listString+= row.get(a);
+                        if(a != row.size()-1) listString += "|";
                     }
 
                     fwm.write(listString + "\n");
