@@ -35,19 +35,9 @@ public class Main {
         BufferedWriter fws = new BufferedWriter(new FileWriter("series.csv"));
         BufferedWriter fwm = new BufferedWriter(new FileWriter("movies.csv"));
 
-        // Generate the headers and specify columns for csv files
-        String seriecolumns = "Title|SerieStarted|Quarter|EpisodeName|EpisodeDate|SeasonNr|EpisodeNr|EpisodeYear|State";
-        String moviecolumns = "Title|Year|Quarter|Medium|State";
-
-        fws.write(seriecolumns + "\n");
-
-        fwm.write(moviecolumns + "\n");
-
-        String listString = "";
-
         try(BufferedReader br = new BufferedReader(new FileReader("movies.list"))) {
             for(String line; (line = br.readLine()) != null; ) {
-                listString = "";
+                String listString = "";
 
                 //Try to match the line to both regex to check whether it's a movie or series
                 Matcher ms = rSeries.matcher(line);
@@ -57,7 +47,7 @@ public class Main {
                     List<String> row = new ArrayList<String>();
 
                     for(int i=1;i<4;i++){
-                        if ("".equals(ms.group(i)) || "????".equals(ms.group(i))) row.add("null");
+                        if ("".equals(ms.group(i)) || i==2 && "????".equals(ms.group(i))) row.add("null");
                         else row.add(ms.group(i));
                     }
 
@@ -125,7 +115,7 @@ public class Main {
                     List<String> row = new ArrayList<String>();
 
                     for (int i = 1; i <= 4; i++){
-                        if ("".equals(mm.group(i)) || "????".equals(mm.group(i))) row.add("null");
+                        if ("".equals(mm.group(i)) || i==2 && "????".equals(mm.group(i))) row.add("null");
                         else row.add(mm.group(i));
                     }
 
