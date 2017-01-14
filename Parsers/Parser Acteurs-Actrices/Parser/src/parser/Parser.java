@@ -69,16 +69,16 @@ public class Parser {
 
                    //als de regex een match heeft is het een serie
                    if (isS.find()){
-                       row.add("null");        //film
+                       row.add("");        //film
                        row.add(isS.group(1)); //serie
                    }else{
                        row.add(m.group(2));    //film
-                       row.add("null");        //serie
+                       row.add("");        //serie
                    }
 
                    for (int i = 3; i <= 14; i++){
-                       if ("".equals(m.group(i))){
-                              row.add("null");
+                       if (m.group(i) == null){
+                              row.add("");
                           }else{
                               row.add(m.group(i));
                           } 
