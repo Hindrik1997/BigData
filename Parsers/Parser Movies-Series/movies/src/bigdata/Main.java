@@ -91,7 +91,7 @@ public class Main {
 
                     else {
                         // if group 4 is not found, it means it's not an episode but the series itself, or a suspended series
-                        for(int i=4;i<7;i++)row.add("null");
+                        for(int i=4;i<=7;i++)row.add("null");
 
                         if("".equals(ms.group(7)) ||"????".equals(ms.group(7))) row.add("null");
                         else row.add(ms.group(7));
