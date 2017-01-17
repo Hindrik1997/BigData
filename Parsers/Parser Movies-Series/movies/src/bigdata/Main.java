@@ -26,8 +26,7 @@ public class Main {
 
     public static void BufferedStream() throws IOException {
 
-        Pattern rSeries = Pattern.compile("\\\"([^\\\"]+)\\\"(?:\\s*\\()(\\d{4}|\\?{4})\\/?([IVXCM]+)?(?:\\)?\\s*)(?:\\{+(?:(?:([^\\}]+)\\(?#?([^\\)]*)\\)?)*)\\}+)?(?:\\s*)(\\{\\{SUSPENDED\\}\\})?(?:\\s*)(\\d{4}|\\?{4})?.*");
-        Pattern rMovies = Pattern.compile("([^\\\"]+)\\s\\((\\d{4}|\\?{4})\\/?([IVXCM]+)?\\)?(?:\\s*\\(([TVG]+)?\\))?\\s*(\\{\\{SUSPENDED\\}\\})?.*");
+        Pattern rSeries = Pattern.compile("\\\"([^\\\"]+)\\\"(?:\\s*\\()(\\d{4}|\\?{4})\\/?([IVXCM]+)?(?:\\)?\\s*)(?:\\{+(?:(?:([^\\}]*)\\(#?([^\\)]*)\\))*)\\}+)?(?:\\s*)(\\{\\{SUSPENDED\\}\\})?(?:\\s*)(\\d{4}|\\?{4})?.*");        Pattern rMovies = Pattern.compile("([^\\\"]+)\\s\\((\\d{4}|\\?{4})\\/?([IVXCM]+)?\\)?(?:\\s*\\(([TVG]+)?\\))?\\s*(\\{\\{SUSPENDED\\}\\})?.*");
 
         Pattern rEpisodeDate = Pattern.compile("\\d{4}\\-\\d{2}\\-\\d{2}");
         Pattern rEpisodeSeason = Pattern.compile("([0-9]+)\\.([0-9]+)");
@@ -73,6 +72,7 @@ public class Main {
                                 row.add(mSeason.group(1));
                                 row.add(mSeason.group(2));
                             }
+                            else { for(int i=0;i<3;i++){row.add("null");} }
                         }
 
                         //if the episode has only a name add null for date, season and episode
