@@ -26,7 +26,7 @@ public class Main {
 
     public static void BufferedStream() throws IOException {
 
-        Pattern rSeries = Pattern.compile("\\\"([^\\\"]+)\\\"(?:\\s*\\()(\\d{4}|\\?{4})\\/?([IVXCM]+)?(?:\\)?\\s*)(?:\\{+(?:(?:([^\\}]*)\\(#?([^\\)]*)\\))*)\\}+)?(?:\\s*)(\\{\\{SUSPENDED\\}\\})?(?:\\s*)(\\d{4}|\\?{4})?.*");
+        Pattern rSeries = Pattern.compile("\\\"([^\\\"]+)\\\"(?:\\s*\\()(\\d{4}|\\?{4})\\/?([IVXCM]+)?(?:\\)?\\s*)(?:\\{+(?:(?:([^\\}]+)\\(?#?([^\\)]*)\\)?)*)\\}+)?(?:\\s*)(\\{\\{SUSPENDED\\}\\})?(?:\\s*)(\\d{4}|\\?{4})?.*");
         Pattern rMovies = Pattern.compile("([^\\\"]+)\\s\\((\\d{4}|\\?{4})\\/?([IVXCM]+)?\\)?(?:\\s*\\(([TVG]+)?\\))?\\s*(\\{\\{SUSPENDED\\}\\})?.*");
 
         Pattern rEpisodeDate = Pattern.compile("\\d{4}\\-\\d{2}\\-\\d{2}");
