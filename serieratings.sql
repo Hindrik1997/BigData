@@ -22,17 +22,18 @@ SELECT title, serie_started, quarter, episode_name, episode_date,
 season_nr, episode_nr, episode_year, state
 FROM staging.series;
 
+UPDATE final.serie 
+SET title = CONCAT('"',CONCAT(title,'"'));
+  
 UPDATE final.serie S
 SET rating_major = R.rating_major,
 rating_minor = R.rating_minor
-FROM staging.rating_movies R
+FROM staging.rating_series R
 WHERE S.title = R.title AND
 (S.episode_name = R.episode_name OR
  (S.episode_name IS NULL AND R.episode_name IS NULL))
-	  AND (S.episode_date = R.episode_date OR
-      (S.episode_date IS NULL AND R.episode_date IS NULL))
 	  AND (S.season_nr = R.season_nr OR
-      (S.episode_nr IS NULL AND R.episode_nr IS NULL))
-	  AND (S.episode_nr = R.episode_nr OR
       (S.season_nr IS NULL AND R.season_nr IS NULL))
+	  AND (S.episode_nr = R.episode_nr OR
+      (S.episode_nr IS NULL AND R.episode_nr IS NULL))
 AND R.rating_major IS NOT NULL AND R.rating_minor IS NOT NULL;
