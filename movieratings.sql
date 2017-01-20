@@ -1,4 +1,5 @@
-CREATE SCHEMA final;
+-- Gemaakt door: Denny
+
 CREATE TABLE final.movie(
 movieId SERIAL UNIQUE NOT NULL,
 title text,

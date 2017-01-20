@@ -1,3 +1,5 @@
+-- Gemaakt door: Denny
+
 CREATE TABLE final.serie(
 serieId SERIAL UNIQUE NOT NULL,
 title text,

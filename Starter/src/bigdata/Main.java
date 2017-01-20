@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by denny on 11-1-2017.
+ * @author denny
+ * executes the .jar files that have been compiled from the parsers
  */
 
 class Task implements Runnable
