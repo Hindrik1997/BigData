@@ -40,7 +40,7 @@ public class Parser {
     
     public static void parseActors(BufferedWriter fw, String nameFile, String gender) throws IOException{
         //belangrijke informatie uit lijn in groups zetten
-        Pattern p = Pattern.compile("^(.*?)\\t(.*?)\\((?:(\\d{4})|\\?{4})(?:\\/(.*?)?\\))?\\)?(?:\\s*\\{\\{(SUSPENDED)}})?(?:\\s*\\{(?:(?:\\((\\d{4}\\-\\d{2}\\-\\d{2})\\))|(.*?))(?:\\s*\\(#([\\d]*)\\.([\\d]*)\\))?})?(?:\\s*\\((V|TV|VG)\\))?(?:\\s*\\((voice)\\))?(?:\\s*\\((as.*?)\\))?(?:\\s*\\[(.*?)\\])?(?:\\s*\\<(.*?)\\>)?");
+        Pattern p = Pattern.compile("^(.*?)\\t(.*)(?:\\((?:(\\d{4})|\\?{4})(?:\\/([IVXCM]+?)?)?\\))(?:\\s\\{\\{(SUSPENDED)}})?(?:\\s*\\{(?:(?:\\((\\d{4}\\-\\d{2}\\-\\d{2})\\))|(.*?))(?:\\s*\\(#([\\d]*)\\.([\\d]*)\\))?})?(?:\\s*\\((V|TV|VG)\\))?(?:\\s\\{\\{(SUSPENDED)}})?(?:\\s*\\((voice)\\))?(?:\\s*\\((as.*?)\\))?(?:\\s*\\[(.*?)\\])?(?:\\s*\\<(.*?)\\>)?\\s?");
         //Regex om te kijken of het een serie is.
         Pattern isSerie = Pattern.compile("^\"(.*)\"$");
         
@@ -76,8 +76,13 @@ public class Parser {
                        row.add("");        //serie
                    }
 
-                   for (int i = 3; i <= 14; i++){
-                       if (m.group(i) == null){
+                   for (int i = 3; i <= 15; i++){
+                       if (i == 11){
+                           if (m.group(i) != null){
+                               row.set(5, m.group(i));
+                           }
+                       }
+                       else if (m.group(i) == null){
                               row.add("");
                           }else{
                               row.add(m.group(i));

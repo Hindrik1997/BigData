@@ -32,7 +32,7 @@ public class GenreParser {
     
     public static void BufferedStream() throws IOException{
         //belangrijke informatie uit lijn in groups zetten
-        Pattern p = Pattern.compile("^(.*?)\\((?:(\\d{4})|\\?{4})(?:\\/(.*?)?\\))?\\)?(?:\\s*\\{\\{(SUSPENDED)}})?(?:\\s*\\{(.*?)(?:\\s*\\(#([\\d]*)\\.([\\d]*)\\))?})?(?:\\s*\\((V|TV|VG)\\))?(?:\\s*(.+))?");
+        Pattern p = Pattern.compile("(.*)(?:\\((?:(\\d{4})|\\?{4})(?:\\/([IVXCM]+)?)?\\))(?:\\s\\{\\{(SUSPENDED)}})?(?:\\s*\\{(?:(?:\\((\\d{4}\\-\\d{2}\\-\\d{2})\\))|(.*?))(?:\\s*\\(#([\\d]*)\\.([\\d]*)\\))?})?(?:\\s*\\((V|TV|VG)\\))?(?:\\s\\{\\{(SUSPENDED)}})?(?:\\t\\s*(.+))\\s?");
         //Regex om te kijken of het een serie is.
         Pattern isSerie = Pattern.compile("^\"(.*)\"$");
         
@@ -78,8 +78,13 @@ public class GenreParser {
                             row.add("null");        //serie
                         }
 
-                        for (int i = 2; i <= 9; i++){
-                            if ("".equals(m.group(i)) || "????".equals(m.group(i))){
+                        for (int i = 2; i <= 11; i++){
+                            if (i == 10){
+                                if (m.group(i) != null){
+                                    row.set(4, m.group(i));
+                                }
+                            }
+                            else if ("".equals(m.group(i))){
                                    row.add("null");
                                }else{
                                    row.add(m.group(i));
