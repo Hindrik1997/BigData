@@ -449,13 +449,13 @@ CREATE TABLE final.serie_location (
   PRIMARY KEY (serie_id,location_id),
   CONSTRAINT fk_serie_location_serie_id
 		FOREIGN KEY (serie_id)
-		REFERENCES serie (serie_id),
+		REFERENCES final.serie (serie_id),
 	CONSTRAINT fk_movie_location_location_id
 		FOREIGN KEY (location_id)
-		REFERENCES location (location_id)
+		REFERENCES final.location (location_id)
 );
 
-INSERT INTO serie_location (serie_id, location_id)
+INSERT INTO final.serie_location (serie_id, location_id)
 SELECT S.serie_id, L.location_id FROM final.serie S
 INNER JOIN staging.location_series SL ON (S.title=SL.title)
 	AND S.serie_started=SL.year_of_release OR (S.serie_started= NULL AND SL.year_of_release=NULL)
@@ -463,7 +463,7 @@ INNER JOIN staging.location_series SL ON (S.title=SL.title)
 	AND S.episode_name=SL.episode_name OR (S.episode_name=NULL AND SL.episode_name=NULL)
 	AND S.season_nr=SL.season_nr OR (S.season_nr=NULL AND SL.season_nr=NULL)
 	AND S.episode_nr=SL.episode_nr OR (S.episode_nr=NULL AND SL.episode_nr=NULL)
-INNER JOIN location L ON SL.location=L.location
+INNER JOIN final.location L ON SL.location=L.location
 ON CONFLICT DO NOTHING;
 -- einde Romeo
 
