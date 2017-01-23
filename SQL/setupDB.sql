@@ -1,5 +1,4 @@
 -- start Hindrik
-
 CREATE SCHEMA staging;
 
 -- Table: staging.actors
@@ -306,7 +305,8 @@ SET
   cause_of_death = staging.biografies.cause_of_death
 FROM staging.biografies
 WHERE final.actors.actor_name = staging.biografies.name;
---einde Hindrik
+-- einde Hindrik
+
 -- start Romeo
 CREATE TABLE staging.location_staging(
   location TEXT
@@ -343,6 +343,7 @@ CREATE TABLE final.genre(
 INSERT INTO final.genre(genre)
 SELECT DISTINCT genre from staging.genres;
 -- einde Jacob
+
 -- start Denny
 CREATE TABLE final.movie(
 movie_id SERIAL UNIQUE NOT NULL,
@@ -360,8 +361,8 @@ INSERT INTO final.movie(
 title, year_of_release, quarter, platform, state)
 SELECT title, year_of_release, quarter, platform, state
 FROM staging.movies;
+-- einde Denny
 
--- einde denny
 -- start Romeo
 CREATE TABLE final.movie_location (
 	movie_id int not null,
@@ -403,9 +404,8 @@ INNER JOIN staging.genres SG ON M.title=SG.movie
 INNER JOIN final.genre G ON SG.genre=G.genre
 ON CONFLICT DO NOTHING;
 -- einde Jacob
+
 -- start Denny
-
-
 UPDATE final.movie M
 SET rating_major = R.rating_major,
 rating_minor = R.rating_minor,
@@ -493,7 +493,6 @@ ON CONFLICT DO NOTHING;
 -- einde Jacob
 
 -- start Denny
-
 UPDATE final.serie S
 SET rating_major = R.rating_major,
 rating_minor = R.rating_minor,
@@ -508,16 +507,15 @@ WHERE CONCAT('"', CONCAT(S.title, '"')) = R.title AND
       (S.episode_nr IS NULL AND R.episode_nr IS NULL))
 AND R.rating_major IS NOT NULL AND R.rating_minor IS NOT NULL AND R.voters IS NOT NULL;
 -- einde Denny
+
 -- start Hindrik
-
-
 CREATE INDEX actors_id_idx ON final.actors(actor_id);
 CREATE INDEX actors_name_idx ON final.actors(actor_name);
 
-CREATE INDEX movie_id_idx ON final.movie(movieid);
+CREATE INDEX movie_id_idx ON final.movie(movie_id);
 CREATE INDEX movie_title_idx ON final.movie(title);
 
-CREATE INDEX serie_id_idx ON final.serie(serieid);
+CREATE INDEX serie_id_idx ON final.serie(serie_id);
 CREATE INDEX serie_title_idx ON final.serie(title);
 
 CREATE TABLE final.movie_actors
@@ -530,7 +528,7 @@ CREATE TABLE final.movie_actors
   billing_position INTEGER,
   CONSTRAINT fk_movie_actors_movie_id
     FOREIGN KEY (movie_id)
-    REFERENCES final.movie(movieid),
+    REFERENCES final.movie(movie_id),
   CONSTRAINT  fk_movie_actors_actor_id
     FOREIGN KEY (actor_id)
     REFERENCES final.actors(actor_id),
@@ -548,10 +546,54 @@ CREATE TABLE final.serie_actors
   billing_position INTEGER,
   CONSTRAINT fk_serie_actors_serie_id
     FOREIGN KEY (serie_id)
-    REFERENCES final.serie(serieid),
+    REFERENCES final.serie(serie_id),
   CONSTRAINT  fk_serie_actors_actor_id
     FOREIGN KEY (actor_id)
     REFERENCES final.actors(actor_id),
   CONSTRAINT  pk_serie_actors
     PRIMARY KEY (serie_id,actor_id)
 );
+
+INSERT INTO final.movie_actors(movie_id, actor_id, voice,credited_as,character_name,billing_position)
+SELECT
+  M.movie_id,
+  A.actor_id,
+  B.voice,
+  B.credited_as,
+  B.character_name,
+  B.billing_position
+FROM
+  final.actors AS A
+  INNER JOIN staging.actors AS B ON A.actor_name = B.actor_name AND
+   B.movie_title IS NOT NULL
+  INNER JOIN final.movie AS M ON
+  (B.movie_title = M.title OR B.movie_title IS NULL AND M.title IS NULL) AND
+  (B.year_of_release = M.year_of_release OR B.year_of_release IS NULL AND M.year_of_release IS NULL) AND
+  (B.quarter = M.quarter OR B.quarter IS NULL AND M.quarter IS NULL) AND
+  (B.state = M.state OR B.state IS NULL AND M.state IS NULL) AND
+  (B.platform = M.platform OR B.platform IS NULL AND M.platform IS NULL)
+ON CONFLICT DO NOTHING;
+
+INSERT INTO final.serie_actors(serie_id, actor_id, voice,credited_as,character_name,billing_position)
+SELECT
+  M.serie_id,
+  A.actor_id,
+  B.voice,
+  B.credited_as,
+  B.character_name,
+  B.billing_position
+FROM
+  final.actors AS A
+  INNER JOIN staging.actors AS B ON A.actor_name = B.actor_name AND
+   B.serie_title IS NOT NULL
+  INNER JOIN final.serie AS M ON
+  (B.serie_title = M.title OR B.serie_title IS NULL AND M.title IS NULL) AND
+  (B.year_of_release = M.serie_started OR B.year_of_release IS NULL AND M.serie_started IS NULL) AND
+  (B.quarter = M.quarter OR B.quarter IS NULL AND M.quarter IS NULL) AND
+  (B.state = M.state OR B.state IS NULL AND M.state IS NULL) AND
+  (B.episode_date = M.episode_date OR B.episode_date IS NULL AND M.episode_date IS NULL) AND
+  (B.episode_name = M.episode_name OR B.episode_name IS NULL AND M.episode_name IS NULL) AND
+  (B.episode_nr = M.episode_nr OR B.episode_nr IS NULL AND M.episode_nr IS NULL) AND
+  (B.season_nr = M.season_nr OR B.season_nr IS NULL AND M.season_nr IS NULL)
+ON CONFLICT DO NOTHING;
+-- einde Hindrik
