@@ -377,10 +377,12 @@ CREATE TABLE final.movie_location (
 );
 
 INSERT INTO final.movie_location (movie_id, location_id)
-SELECT M.movie_id, L.location_id FROM final.movie M
+SELECT M.movie_id, L.location_id FROM final.movie M 
 INNER JOIN staging.location_movies ML ON M.title=ML.title
-	AND M.year_of_release=ML.year_of_release OR M.year_of_release= NULL AND ML.year_of_release=NULL AND M.quarter=ML.quarter OR M.quarter=NULL AND ML.quarter=NULL
-INNER JOIN final.location L ON ML.location=L.location
+AND (M.year_of_release=ML.year_of_release OR (M.year_of_release IS NULL AND ML.year_of_release IS NULL))
+AND (M.quarter=ML.quarter OR (M.quarter IS NULL AND ML.quarter IS NULL))
+AND (m.platform=ML.platform OR (M.platform IS NULL AND ML.platform IS NULL ))
+  INNER JOIN final.location L ON ML.location=L.location
 ON CONFLICT DO NOTHING;
 -- einde Romeo
 
@@ -400,7 +402,9 @@ CREATE TABLE final.movie_genre (
 INSERT INTO final.movie_genre(movie_id, genre_id)
 SELECT M.movie_id, G.genre_id FROM final.movie M
 INNER JOIN staging.genres SG ON M.title=SG.movie
-	AND M.year_of_release=SG.year_of_release OR M.year_of_release= NULL AND SG.year_of_release=NULL AND M.quarter=SG.quarter OR M.quarter=NULL AND SG.quarter=NULL
+	AND (M.year_of_release=SG.year_of_release OR (M.year_of_release IS NULL AND SG.year_of_release IS NULL))
+	AND (M.quarter=SG.quarter OR (M.quarter IS NULL AND SG.quarter IS NULL))
+	AND (m.platform=SG.platform OR (M.platform IS NULL AND SG.platform IS NULL ))
 INNER JOIN final.genre G ON SG.genre=G.genre
 ON CONFLICT DO NOTHING;
 -- einde Jacob
@@ -458,11 +462,11 @@ CREATE TABLE final.serie_location (
 INSERT INTO final.serie_location (serie_id, location_id)
 SELECT S.serie_id, L.location_id FROM final.serie S
 INNER JOIN staging.location_series SL ON (S.title=SL.title)
-	AND S.serie_started=SL.year_of_release OR (S.serie_started= NULL AND SL.year_of_release=NULL)
-	AND S.quarter=SL.quarter OR (S.quarter=NULL AND SL.quarter=NULL)
-	AND S.episode_name=SL.episode_name OR (S.episode_name=NULL AND SL.episode_name=NULL)
-	AND S.season_nr=SL.season_nr OR (S.season_nr=NULL AND SL.season_nr=NULL)
-	AND S.episode_nr=SL.episode_nr OR (S.episode_nr=NULL AND SL.episode_nr=NULL)
+	AND (S.serie_started=SL.year_of_release OR (S.serie_started IS NULL AND SL.year_of_release IS NULL))
+	AND (S.quarter=SL.quarter OR (S.quarter IS NULL AND SL.quarter IS NULL))
+	AND (S.episode_name=SL.episode_name OR (S.episode_name IS NULL AND SL.episode_name IS NULL))
+	AND (S.season_nr=SL.season_nr OR (S.season_nr IS NULL AND SL.season_nr IS NULL))
+	AND (S.episode_nr=SL.episode_nr OR (S.episode_nr IS NULL AND SL.episode_nr IS NULL))
 INNER JOIN final.location L ON SL.location=L.location
 ON CONFLICT DO NOTHING;
 -- einde Romeo
@@ -483,11 +487,11 @@ CREATE TABLE final.serie_genre (
 INSERT INTO final.serie_genre (serie_id, genre_id)
 SELECT S.serie_id, G.genre_id FROM final.serie S
 INNER JOIN staging.genres SG ON S.title=SG.serie
-	AND S.serie_started=SG.year_of_release OR (S.serie_started= NULL AND SG.year_of_release=NULL)
-	AND S.quarter=SG.quarter OR (S.quarter=NULL AND SG.quarter=NULL)
-	AND S.episode_name=SG.episode_name OR (S.episode_name=NULL AND SG.episode_name=NULL)
-	AND S.season_nr=SG.season_nr OR (S.season_nr=NULL AND SG.season_nr=NULL)
-	AND S.episode_nr=SG.episode_nr OR (S.episode_nr=NULL AND SG.episode_nr=NULL)
+	AND (S.serie_started=SG.year_of_release OR (S.serie_started IS NULL AND SG.year_of_release IS NULL))
+	AND (S.quarter=SG.quarter OR (S.quarter IS NULL AND SG.quarter IS NULL))
+	AND (S.episode_name=SG.episode_name OR (S.episode_name IS NULL AND SG.episode_name IS NULL))
+	AND (S.season_nr=SG.season_nr OR (S.season_nr IS NULL AND SG.season_nr IS NULL))
+	AND (S.episode_nr=SG.episode_nr OR (S.episode_nr IS NULL AND SG.episode_nr IS NULL))
 INNER JOIN final.genre G ON SG.genre=G.genre
 ON CONFLICT DO NOTHING;
 -- einde Jacob
