@@ -32,7 +32,7 @@ public class BiografieParser {
     
     public static void BufferedStream() throws IOException{
         //de regex voor biography.list
-        Pattern p = Pattern.compile("^NM: (.+)|^RN: (.+)|^HT: (.+)|^DB:\\s([^,]*)(?:\\,\\s(.*))?|^DD:(.*?)(?:,|$)(.*?)(?:\\((.*)\\)|$)");
+        Pattern p = Pattern.compile("^NM: (.+)|^RN: (.+)|^HT: (.+)|^DB:\\s(\\d[^,]*)(?:\\,\\s(.*))?|^DD:(.*?)(?:,|$)(.*?)(?:\\((.*)\\)|$)");
         
         //naar deze csv file wordt de output geschreven
         BufferedWriter fw = new BufferedWriter(new FileWriter("biography.csv"));
