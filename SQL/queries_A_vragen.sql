@@ -1,9 +1,5 @@
 --A3
 --levert de naam van de acteur met de langste filmcarrière
-CREATE OR REPLACE VIEW final.actors_years_view AS (
-    SELECT A.actor_name, M.year_of_release FROM final.actors AS A INNER JOIN final.movie_actors MA ON MA.actor_id = A.actor_id
-      INNER JOIN final.movie AS M ON MA.movie_id = M.movie_id AND M.year_of_release IS NOT NULL
-);
 SELECT  actor_name, MAX(year_of_release) - MIN(year_of_release) AS career_length FROM
   final.actors_years_view GROUP BY actor_name ORDER BY career_length DESC LIMIT 1;
 
@@ -18,12 +14,7 @@ SELECT tmp.actor_name, COUNT(tmp.actor_name) AS roles FROM (SELECT A.actor_name 
 INNER JOIN final.movie M ON MA.movie_id = M.movie_id AND M.rating_major < 5) AS tmp GROUP BY actor_name ORDER BY roles DESC LIMIT 1;
 
 --A16
---maakt een view met alle filmtitels die het woord 'Beer' bevatten, met het jaar en genre erbij en zoekt welk jaar en welk genre het vaakst voorkomen
-CREATE OR REPLACE VIEW final.films_beer_view AS
-(
-SELECT M.title, M.year_of_release, G.genre FROM final.genre G INNER JOIN final.movie_genre MG ON MG.genre_id = G.genre_id
-  INNER JOIN final.movie M ON MG.movie_id  = M.movie_id AND M.title LIKE '% Beer %' AND M.year_of_release > 1990
-);
+--Zoekt welk jaar en welk genre het vaakst voorkomen in films met het woord 'Beer' in de titel
 
 SELECT year_of_release, COUNT(year_of_release)
 FROM final.films_beer_view
@@ -47,8 +38,4 @@ LIMIT 10;
 
 --Eigen vraag 2
 --levert het best beoordelde genre van 2016 (of een ander jaar, kan evt. variabel gemaakt worden)
-CREATE OR REPLACE VIEW final.genre_ratings_view AS(
-SELECT G.genre, M.rating_major, M.rating_minor FROM (final.genre AS G INNER JOIN final.movie_genre AS MG ON (MG.genre_id = G.genre_id)
-INNER JOIN final.movie AS M ON MG.movie_id = M.movie_id) WHERE M.rating_major IS NOT NULL AND M.rating_minor IS NOT NULL AND M.year_of_release = 2016
-GROUP BY G.genre, M.rating_major, M.rating_minor);
 SELECT DISTINCT genre, AVG(rating_major + (rating_minor/10)) AS avg_rating FROM final.genre_ratings_view GROUP BY genre ORDER BY avg_rating DESC LIMIT 1;
