@@ -601,3 +601,35 @@ FROM
   (B.season_nr = M.season_nr OR B.season_nr IS NULL AND M.season_nr IS NULL)
 ON CONFLICT DO NOTHING;
 -- einde Hindrik
+
+-- start Denny
+CREATE MATERIALIZED VIEW final.actors_years_view AS (
+    SELECT A.actor_name, M.year_of_release FROM final.actors AS A INNER JOIN final.movie_actors MA ON MA.actor_id = A.actor_id
+      INNER JOIN final.movie AS M ON MA.movie_id = M.movie_id AND M.year_of_release IS NOT NULL
+);
+
+CREATE INDEX actors_years_view_actor_name_idx ON final.actors_years_view(actor_name);
+CREATE INDEX actors_years_view_year_of_release_idx ON final.actors_years_view(year_of_release);
+CREATE INDEX actors_years_view_combi_idx ON final.actors_years_view(actor_name, year_of_release);
+
+CREATE MATERIALIZED VIEW final.films_beer_view AS
+(
+SELECT M.title, M.year_of_release, G.genre FROM final.genre G INNER JOIN final.movie_genre MG ON MG.genre_id = G.genre_id
+  INNER JOIN final.movie M ON MG.movie_id  = M.movie_id AND M.title LIKE '% Beer %' AND M.year_of_release > 1990
+);
+
+CREATE INDEX films_beer_view_title_idx ON final.films_beer_view(title);
+CREATE INDEX films_beer_view_year_of_release_idx ON final.films_beer_view(year_of_release);
+CREATE INDEX films_beer_view_genre_idx ON final.films_beer_view(genre);
+CREATE INDEX films_beer_view_combi_idx ON final.films_beer_view(title,year_of_release,genre);
+
+CREATE MATERIALIZED VIEW final.genre_ratings_view AS(
+SELECT G.genre, M.rating_major, M.rating_minor FROM (final.genre AS G INNER JOIN final.movie_genre AS MG ON (MG.genre_id = G.genre_id)
+INNER JOIN final.movie AS M ON MG.movie_id = M.movie_id) WHERE M.rating_major IS NOT NULL AND M.rating_minor IS NOT NULL AND M.year_of_release = 2016
+GROUP BY G.genre, M.rating_major, M.rating_minor);
+
+CREATE INDEX genre_ratings_view_genre_idx ON final.genre_ratings_view(genre);
+CREATE INDEX genre_ratings_view_rating_major_idx ON final.genre_ratings_view(rating_major);
+CREATE INDEX genre_ratings_view_rating_minor_idx ON final.genre_ratings_view(rating_minor);
+CREATE INDEX genre_ratings_view_combi_idx ON final.genre_ratings_view(genre, rating_major, rating_minor);
+-- einde Denny
