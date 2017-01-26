@@ -16,17 +16,17 @@ INNER JOIN final.movie M ON MA.movie_id = M.movie_id AND M.rating_major < 5) AS 
 --A16
 --Zoekt welk jaar en welk genre het vaakst voorkomen in films met het woord 'Beer' in de titel
 
-SELECT year_of_release, COUNT(year_of_release)
+SELECT * FROM
+(SELECT year_of_release, COUNT(year_of_release)
 FROM final.films_beer_view
 GROUP BY year_of_release
 ORDER BY COUNT(year_of_release) DESC
-LIMIT 1;
-
-SELECT genre, COUNT(genre)
+LIMIT 1) AS A,
+(SELECT genre, COUNT(genre)
 FROM final.films_beer_view
 GROUP BY genre
 ORDER BY COUNT(genre) DESC
-LIMIT 1;
+LIMIT 1) AS B;
 
 --Eigen vraag 1
 --levert de 10 meest voorkomende waardes van death_location in de acteurs tabel
