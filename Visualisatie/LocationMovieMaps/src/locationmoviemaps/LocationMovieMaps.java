@@ -25,7 +25,9 @@ import java.util.regex.Pattern;
  *
  * @author jacob
  */
-public class LocationMovieMaps {
+public class LocationMovieMaps {    
+    
+        static boolean query = true;
 
     /**
      * @param args the command line arguments
@@ -39,10 +41,24 @@ public class LocationMovieMaps {
         browser.loadURL( resourcesDirectory.getAbsolutePath() + "\\maps.html");
         
         JTextField searchMovie = new JTextField();
-        searchMovie.setColumns(30);
+        searchMovie.setColumns(30);      
         
-        JButton zoomInButton = new JButton("Zoek knop denk ik");
-        zoomInButton.addActionListener(new ActionListener() {
+        JButton switchButton = new JButton("Movie location");
+        switchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent ae) {
+                query = !query;
+                if(query){
+                    switchButton.setText("Movie location");
+                }
+                else{
+                    switchButton.setText("Actor birthlocation");
+                }
+            }
+        });
+        
+        JButton searchButton = new JButton("Zoeken");
+        searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent ae) {
                 clearMarkers(browser);
@@ -56,7 +72,16 @@ public class LocationMovieMaps {
                         //door resultaten lopen
                         while(rs.next( ))
                         {
-                            createMarker(browser, rs.getString(1));
+                            if(query)
+                                createMarker(browser, rs.getString(1));
+                            else
+                            {
+                                createMarker(browser, rs.getString(1));
+                                 browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + rs.getString(2) + "', position: myLatLng, }); infowindow.open(map, this);});");
+                            }
+                            System.out.println("1 " + rs.getString(1));
+                            //System.out.println("2 " + rs.getString(2));
+                                
                             try {
                                 Thread.sleep(1000);
                             } catch(InterruptedException ex) {
@@ -77,7 +102,8 @@ public class LocationMovieMaps {
         
         JPanel toolBar = new JPanel();
         toolBar.add(searchMovie);
-        toolBar.add(zoomInButton);
+        toolBar.add(searchButton);
+        toolBar.add(switchButton);
         
         JFrame frame = new JFrame("JxBrowser Google Maps");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -92,7 +118,7 @@ public class LocationMovieMaps {
     {
         try 
         {
-            String host = "jdbc:postgresql://localhost:5432/BigData";
+            String host = "jdbc:postgresql://localhost:5432/StagingBigData";
             String uName = "postgres";
             String uPass= "";
             return DriverManager.getConnection( host, uName, uPass );
@@ -107,7 +133,7 @@ public class LocationMovieMaps {
     public static ResultSet getLocationsFromMovie(Connection con, String movie){
         try {
             Statement stmt = con.createStatement( );
-            String SQL = "SELECT L.location FROM final.location L INNER JOIN final.movie_location ML ON L.location_id=ML.location_id INNER JOIN final.movie M ON ML.movie_id = M.movie_id WHERE m.title = '" + movie + "';";
+            String SQL = switchQuery(query, movie);
             return stmt.executeQuery( SQL);
         } catch (SQLException err){
             System.out.println( err.getMessage( ) );
@@ -142,8 +168,12 @@ public class LocationMovieMaps {
             browser.executeJavaScript("var myLatLng = {lat: " + results[0].geometry.location.lat + ", lng: " + results[0].geometry.location.lng + "};");
             browser.executeJavaScript("var map = new google.maps.Map(document.getElementById('map-canvas'), {zoom: 12, center: myLatLng});");
             browser.executeJavaScript("var marker = new google.maps.Marker({ position: myLatLng, map: map, clickable: true});");
+            //browser.executeJavaScript("var lookup = []; lookup.push([lat, lang]); var search = [lat, lang");
+            //boolean isLocationFree = browser.executeJavaScriptAndReturnValue("for (var i = 0, l = lookup.length; i < l; i++) {    if (lookup[i][0] === search[0] && lookup[i][1] === search[1]) {      return false;    }  }  return true;").getBooleanValue();
+            
             browser.executeJavaScript("markers.push(marker);");
-            browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + country + "', position: myLatLng, }); infowindow.open(map, this);});");
+            if(query)
+                browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + country + "', position: myLatLng, }); infowindow.open(map, this);});");
             
         }else{
             System.out.println("Geen locaties gevonden");
@@ -151,6 +181,7 @@ public class LocationMovieMaps {
     }
    
     public static void clearMarkers (Browser browser){
+        //werkt niet
         browser.executeJavaScript("var markers = [];");
         browser.executeJavaScript("setMapOnAll(null);");
     }
@@ -163,5 +194,12 @@ public class LocationMovieMaps {
         browser.executeJavaScript("var bounds = new google.maps.LatLngBounds();");
         browser.executeJavaScript("for (var i = 0; i < markers.length; i++) {bounds.extend(markers[i].getPosition());}");
         browser.executeJavaScript("map.fitBounds(bounds);");
+    }
+    
+    public static String switchQuery(boolean query, String par){
+    if(query)
+            return "SELECT L.location FROM final.location L INNER JOIN final.movie_location ML ON L.location_id=ML.location_id INNER JOIN final.movie M ON ML.movie_id = M.movie_id WHERE m.title = '" + par + "';";
+        else
+            return "SELECT birth_location, actor_name FROM final.actors WHERE actors.actor_name LIKE '%" + par + "%' AND actors.birth_location IS NOT NULL;";        
     }
 }
