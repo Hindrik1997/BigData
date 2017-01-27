@@ -118,7 +118,7 @@ public class LocationMovieMaps {
     {
         try 
         {
-            String host = "jdbc:postgresql://localhost:5432/StagingBigData";
+            String host = "jdbc:postgresql://localhost:5432/BigData";
             String uName = "postgres";
             String uPass= "";
             return DriverManager.getConnection( host, uName, uPass );
@@ -181,9 +181,9 @@ public class LocationMovieMaps {
     }
    
     public static void clearMarkers (Browser browser){
-        //werkt niet
+        
+        browser.executeJavaScript("for (var i = 0; i < markers.length; i++) { markers[i].setMap(null);}");
         browser.executeJavaScript("var markers = [];");
-        browser.executeJavaScript("setMapOnAll(null);");
     }
     
     public static void setMarkers (Browser browser){
