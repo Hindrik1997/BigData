@@ -633,3 +633,22 @@ CREATE INDEX genre_ratings_view_rating_major_idx ON final.genre_ratings_view(rat
 CREATE INDEX genre_ratings_view_rating_minor_idx ON final.genre_ratings_view(rating_minor);
 CREATE INDEX genre_ratings_view_combi_idx ON final.genre_ratings_view(genre, rating_major, rating_minor);
 -- einde Denny
+
+-- start Jacob & Romeo
+CREATE VIEW age_count AS 
+	SELECT M.year_of_release - CAST(A.birth_date AS INTEGER)  AS age, COUNT(A.actor_id) AS actresses_played_movies 
+	FROM final.actors A 
+	INNER JOIN final.movie_actors MA ON A.actor_id=MA.actor_id 
+	INNER JOIN final.movie M ON MA.movie_id=M.movie_id 
+	WHERE M.year_of_release IS NOT NULL AND A.birth_date IS NOT NULL AND A.gender = 'f' AND M.year_of_release - CAST(A.birth_date AS INTEGER) BETWEEN 0 AND 100 
+	GROUP BY M.year_of_release - CAST(A.birth_date AS INTEGER) ORDER BY age;
+
+CREATE VIEW avg_rating_season_number AS 
+	SELECT season_number, avg(rating_serie) AS average_rating 
+		FROM (SELECT max(season_nr) AS season_number, avg(rating_season) AS rating_serie 
+			FROM (SELECT title, season_nr, avg(rating_major + 0.1*rating_minor) AS rating_season FROM serie S 
+			WHERE season_nr IS NOT NULL AND rating_major IS NOT NULL AND rating_minor IS NOT NULL 
+			GROUP BY title, season_nr) AS season_rating 
+		GROUP BY title) AS serie_rating WHERE season_number < 100 
+	GROUP BY season_number;
+-- einde Jacob & Romeo
