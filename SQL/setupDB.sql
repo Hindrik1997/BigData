@@ -330,7 +330,7 @@ CREATE TABLE final.location(
 INSERT INTO final.location (location)
 SELECT DISTINCT location FROM staging.location_staging;
 
-DROP TABLE staging.location_staging;
+--DROP TABLE staging.location_staging;
 -- einde Romeo
 
 -- start Jacob
