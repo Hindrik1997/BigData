@@ -50,16 +50,16 @@ public class MapsPanel extends JPanel {
         JTextField searchMovie = new JTextField();
         searchMovie.setColumns(30);
 
-        JButton switchButton = new JButton("Movie location");
-        switchButton.addActionListener(ae -> {
-            _query = !_query;
-            if(_query){
-                switchButton.setText("Movie location");
-            }
-            else{
-                switchButton.setText("Actor birthlocation");
-            }
-        });
+//        JButton switchButton = new JButton("Movie location");
+//        switchButton.addActionListener(ae -> {
+//            _query = !_query;
+//            if(_query){
+//                switchButton.setText("Movie location");
+//            }
+//            else{
+//                switchButton.setText("Actor birthlocation");
+//            }
+//        });
 
         JButton searchButton = new JButton("Zoeken");
         searchButton.addActionListener(new ActionListener() {
@@ -107,7 +107,7 @@ public class MapsPanel extends JPanel {
         JPanel toolBar = new JPanel();
         toolBar.add(searchMovie);
         toolBar.add(searchButton);
-        toolBar.add(switchButton);
+//        toolBar.add(switchButton);
 
         setLayout(new BorderLayout());
         add(_browser_view, BorderLayout.CENTER);

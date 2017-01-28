@@ -16,7 +16,7 @@ public class LocationActor extends Command {
     public void action(ActionEvent actionEvent) {
         Main.getInstance().setMainJPanel(
                 new QuestionJPanelBase(
-                        new MapsPanel(true)
+                        new MapsPanel(false)
                 )
         );
     }

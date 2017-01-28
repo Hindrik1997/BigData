@@ -15,7 +15,7 @@ public class LocationMovie extends Command {
     public void action(ActionEvent actionEvent) {
         Main.getInstance().setMainJPanel(
                 new QuestionJPanelBase(
-                        new MapsPanel(false)
+                        new MapsPanel(true)
                 )
         );
     }
