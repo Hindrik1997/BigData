@@ -8,5 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="postgresql-9.4.1212" level="project" />
+    <orderEntry type="library" name="google-maps-services-0.1.17" level="project" />
+    <orderEntry type="library" name="jxbrowser-6.11.1" level="project" />
+    <orderEntry type="library" name="license" level="project" />
   </component>
 </module>

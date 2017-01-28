@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="google-maps-services-0.1.17">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/google-maps-services-0.1.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/gson-2.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/joda-time-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/okhttp-2.7.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/okio-1.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/postgresql-9.4.1212.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

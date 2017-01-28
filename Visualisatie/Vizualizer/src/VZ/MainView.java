@@ -75,19 +75,9 @@ class MainView extends JFrame {
         commands.add(new DeathliestLocationsCommand());
         commands.add(new BestOf2K16Command());
 
-        commands.add(new Command() {
-            @Override
-            public void action(ActionEvent actionEvent) {
-                System.out.println("TEST");
-            }
-        });
+        commands.add(new LocationActor());
 
-        commands.add(new Command() {
-            @Override
-            public void action(ActionEvent actionEvent) {
-                System.out.println("TEST");
-            }
-        });
+        commands.add(new LocationMovie());
 
         commands.add(new VerbandActricesAge());
         commands.add(new VerbandSeasonRatings());
