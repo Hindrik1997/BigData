@@ -35,7 +35,7 @@ public class MapsPanel extends JPanel {
     public MapsPanel(boolean query)
     {
         _browser = new Browser();
-        _browser_view = new BrowserView();
+        _browser_view = new BrowserView(_browser);
         _query = query;
 
         _html = new File("maps.html");
