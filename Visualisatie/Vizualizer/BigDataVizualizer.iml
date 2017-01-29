@@ -7,9 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="postgresql-9.4.1212" level="project" />
-    <orderEntry type="library" name="google-maps-services-0.1.17" level="project" />
-    <orderEntry type="library" name="jxbrowser-6.11.1" level="project" />
-    <orderEntry type="library" name="license" level="project" />
+    <orderEntry type="library" name="jx1" level="project" />
+    <orderEntry type="library" name="maps services" level="project" />
+    <orderEntry type="library" name="jars" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="jx" level="project" />
   </component>
 </module>
