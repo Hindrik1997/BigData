@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+/**
+ * Abstracts away the creation of a label and a button
+ */
 public class ButtonAndLabel extends JPanel {
 
     private JPanel _inner_panel = null;
@@ -33,6 +37,9 @@ public class ButtonAndLabel extends JPanel {
         this.add(_inner_panel);
     }
 
+    /**
+     * Removes the action listeners from the button
+     */
     public void removeActionListeners()
     {
         for(ActionListener al : _button.getActionListeners())
@@ -41,6 +48,10 @@ public class ButtonAndLabel extends JPanel {
         }
     }
 
+    /**
+     * Adds a command to the button's click event
+     * @param command command to add
+     */
     public void setActionListener(Command command)
     {
         _button.addActionListener(command);

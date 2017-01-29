@@ -11,6 +11,10 @@ import java.util.Arrays;
 /**
  * Created by hindrik on 28-1-17.
  */
+
+/**
+ * Represents the action to show the connection between age and actresses their difficulty in getting a role
+ */
 public class VerbandActricesAge extends Command {
 
     @Override

@@ -5,10 +5,18 @@ import java.sql.*;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+
+/**
+ * Class which abstracts the connection to the database
+ */
 class SQLManager {
 
     private Connection connection = null;
 
+    /**
+     * Default constructor which sets up the postgres driver
+     */
     SQLManager()
     {
         try {
@@ -27,6 +35,11 @@ class SQLManager {
         }
     }
 
+    /**
+     * Allows for the execution of a query on the database
+     * @param query query to execute
+     * @return result of the query
+     */
     ResultSet executeQuery(String query)
     {
         Statement s = null;
@@ -49,7 +62,9 @@ class SQLManager {
     }
 
 
-
+    /**
+     * Closes the connection to the database
+     */
     void close()
     {
         System.out.println("De connectie met de database wordt gesloten...");
@@ -61,6 +76,10 @@ class SQLManager {
         }
     }
 
+    /**
+     * Special function for the GC, to close the connection. Only provided for completeness
+     * @throws Throwable exceptions!
+     */
     @Override
     protected void finalize() throws Throwable {
         close();

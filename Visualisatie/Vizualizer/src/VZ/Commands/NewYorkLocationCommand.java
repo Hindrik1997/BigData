@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 26-1-17.
  */
+
+/**
+ * Represents the actions needed to show the movies which are located in new york
+ */
 public class NewYorkLocationCommand extends Command {
     @Override
     public void action(ActionEvent actionEvent) {

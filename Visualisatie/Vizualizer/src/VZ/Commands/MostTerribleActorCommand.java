@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 26-1-17.
  */
+
+/**
+ * Represents the actions to show the worst actors
+ */
 public class MostTerribleActorCommand extends Command {
     @Override
     public void action(ActionEvent actionEvent) {

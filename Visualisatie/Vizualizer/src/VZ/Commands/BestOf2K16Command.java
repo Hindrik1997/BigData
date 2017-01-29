@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 27-1-17.
  */
+
+/**
+ * Represents the actions needed for showing the best movie genre of 2016.
+ */
 public class BestOf2K16Command extends Command {
     @Override
     public void action(ActionEvent actionEvent) {

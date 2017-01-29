@@ -21,13 +21,20 @@ import java.util.stream.Stream;
  * Created by hindrik on 25-1-17.
  */
 
+/**
+ * Acts as the model of the application. Provides an abstracted way to visualize data.
+ */
 class MainView extends JFrame {
     private JPanel _main_panel = null;
     private JPanel _previous_panel = null;
 
+    /**
+     * Constructor. Handles the creation of the JFrame.
+     * Defaults to showing a main menu.
+     */
     MainView() {
         super("Hoofdmenu");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         _main_panel = new JPanel(new GridLayout(0, 2));
         _main_panel.setMinimumSize(new Dimension(1000, 1000));
         _main_panel.setPreferredSize(new Dimension(1000, 1000));
@@ -48,6 +55,10 @@ class MainView extends JFrame {
         });
     }
 
+    /**
+     * Initializes the buttons used for the questions in the main menu.
+     * Loads in the questions using a file, for easy modification of the text.
+     */
     private void initialize() {
         List<String> questionStrings = new ArrayList<>();
         List<Command> commands = setupCommands();
@@ -65,6 +76,10 @@ class MainView extends JFrame {
         }
     }
 
+    /**
+     * Sets up the list of commands used for the questions
+     * @return a list of command objects
+     */
     private List<Command> setupCommands() {
         List<Command> commands = new ArrayList<>();
 
@@ -85,6 +100,11 @@ class MainView extends JFrame {
         return commands;
     }
 
+    /**
+     * Sets the main JPanel of the application in a safe manner.
+     * Defaults to the main menu.
+     * @param panel panel to set. (Null -> main menu)
+     */
     void setMainJPanel(JPanel panel) {
         this.getRootPane().getContentPane().removeAll();
         if (panel == null) {
@@ -94,6 +114,9 @@ class MainView extends JFrame {
         forceRefresh();
     }
 
+    /**
+     * Forces refresing of the JFrame
+     */
     void forceRefresh() {
         SwingUtilities.updateComponentTreeUI(this);
         this.invalidate();

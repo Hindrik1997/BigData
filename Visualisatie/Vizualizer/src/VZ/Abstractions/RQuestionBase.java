@@ -9,6 +9,10 @@ import java.util.List;
 /**
  * Created by hindrik on 28-1-17.
  */
+
+/**
+ * Provides a base panel for showing questions from our project with R
+ */
 public class RQuestionBase extends JPanel {
 
     public RQuestionBase(String question, String SQL, List<String> RScript, String image0, String image1, String conclusie)

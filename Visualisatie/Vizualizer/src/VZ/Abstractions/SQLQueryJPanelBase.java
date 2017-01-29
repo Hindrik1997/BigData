@@ -16,6 +16,10 @@ import java.util.Vector;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+/**
+ * Provides an easy way to create a question which uses a query and visualizes it's results
+ */
 public class SQLQueryJPanelBase extends JPanel {
 
     public SQLQueryJPanelBase(String question, String query)

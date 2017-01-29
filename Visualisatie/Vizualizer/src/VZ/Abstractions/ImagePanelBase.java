@@ -10,10 +10,20 @@ import java.io.IOException;
 /**
  * Created by hindrik on 28-1-17.
  */
+
+/**
+ * Provides an easy interface for a panel supporting an image.
+ */
 public class ImagePanelBase extends JPanel {
 
     private BufferedImage _image;
 
+    /**
+     * Constructor of the panel
+     * @param image path to image to show
+     * @param x width of panel
+     * @param y height of panel
+     */
     public ImagePanelBase(String image, int x, int y)
     {
         try {
@@ -23,12 +33,6 @@ public class ImagePanelBase extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
 
         _image = getScaledImage(_image,x,y);
 
@@ -44,6 +48,13 @@ public class ImagePanelBase extends JPanel {
         g.drawImage(_image,0,0,this);
     }
 
+    /**
+     * Scales the image
+     * @param srcImg image to scale
+     * @param w width to scale to
+     * @param h height to scale to
+     * @return scaled image
+     */
     private BufferedImage getScaledImage(Image srcImg, int w, int h){
         BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TRANSLUCENT);
         Graphics2D g2 = resizedImg.createGraphics();

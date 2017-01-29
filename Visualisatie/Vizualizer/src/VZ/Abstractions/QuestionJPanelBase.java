@@ -10,6 +10,11 @@ import java.awt.*;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+/**
+ * Class that abstracts away the functionality for easy addition of question panels.
+ * Allows for easy chaining of constructors, and is very similar to the decorator pattern.
+ */
 public class QuestionJPanelBase extends JPanel {
 
     public QuestionJPanelBase(JPanel content)
