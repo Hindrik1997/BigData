@@ -7,13 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-<<<<<<< HEAD
-    <orderEntry type="library" name="jars" level="project" />
     <orderEntry type="library" name="jx1" level="project" />
     <orderEntry type="library" name="maps services" level="project" />
     <orderEntry type="library" name="jars" level="project" />
     <orderEntry type="library" name="lib" level="project" />
->>>>>>> 413dd7188cf4cdefeb6e6e0131b775a9fd67a862
     <orderEntry type="library" name="jx" level="project" />
   </component>
 </module>
