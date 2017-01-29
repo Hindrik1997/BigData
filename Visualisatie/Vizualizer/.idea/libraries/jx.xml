@@ -1,11 +1,11 @@
 <component name="libraryTable">
-  <library name="jxbrowser-6.11.1">
+  <library name="jx">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/jars/jx/jxbrowser-6.11.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/jars/jx/jxbrowser-linux32-6.11.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/jars/jx/jxbrowser-linux64-6.11.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/jars/jx/jxbrowser-mac-6.11.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/jars/jx/jxbrowser-win-6.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/jx/jxbrowser-mac-6.11.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

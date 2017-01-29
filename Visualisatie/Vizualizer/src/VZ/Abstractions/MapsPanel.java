@@ -47,8 +47,11 @@ public class MapsPanel extends JPanel {
 
     void init()
     {
+        JTextArea results = new JTextArea(6, 30);
         JTextField searchMovie = new JTextField();
+        JScrollPane resultsScroll = new JScrollPane(results);
         searchMovie.setColumns(30);
+        results.setEditable(false);
 
 //        JButton switchButton = new JButton("Movie location");
 //        switchButton.addActionListener(ae -> {
@@ -67,6 +70,11 @@ public class MapsPanel extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent ae) {
                 clearMarkers(_browser);
                 String movie = searchMovie.getText();
+                int countRows = 0;
+                
+                if (_query){
+                    results.setText("In deze landen heeft deze film zich afgespeeld: \n");
+                }
 
                 if (movie != null){
                     //locaties bij film ophalen
@@ -76,10 +84,12 @@ public class MapsPanel extends JPanel {
                             //door resultaten lopen
                             while(rs.next( ))
                             {
-                                if(_query)
-                                    createMarker(_browser, rs.getString(1));
+                                if(_query){
+                                    results.append(createMarker(_browser, rs.getString(1))+ "\n");
+                                }
                                 else
                                 {
+                                    countRows++;
                                     createMarker(_browser, rs.getString(1));
                                     _browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + rs.getString(2) + "', position: myLatLng, }); infowindow.open(map, this);});");
                                 }
@@ -98,6 +108,10 @@ public class MapsPanel extends JPanel {
                     }else{
                         System.out.println("er gaat iets fout");
                     }
+                    
+                    if (!_query){
+                        results.setText("Er zijn " + countRows + " acteurs met deze naam");
+                    }
                     setMarkers(_browser);
                     zoomOutVisibleMarkers(_browser);
                 }
@@ -107,6 +121,7 @@ public class MapsPanel extends JPanel {
         JPanel toolBar = new JPanel();
         toolBar.add(searchMovie);
         toolBar.add(searchButton);
+        toolBar.add(resultsScroll);
 //        toolBar.add(switchButton);
 
         setLayout(new BorderLayout());
@@ -144,7 +159,7 @@ public class MapsPanel extends JPanel {
             return "SELECT birth_location, actor_name FROM final.actors WHERE actors.actor_name LIKE '%" + par + "%' AND actors.birth_location IS NOT NULL;";
     }
 
-    public void createMarker(Browser browser, String location){
+    public String createMarker(Browser browser, String location){
         //regex voor locatie ()
         Pattern p = Pattern.compile("(.*)\\((?:.+)\\)(.*)");
         Matcher m = p.matcher(location);
@@ -175,14 +190,14 @@ public class MapsPanel extends JPanel {
             //boolean isLocationFree = browser.executeJavaScriptAndReturnValue("for (var i = 0, l = lookup.length; i < l; i++) {    if (lookup[i][0] === search[0] && lookup[i][1] === search[1]) {      return false;    }  }  return true;").getBooleanValue();
 
             browser.executeJavaScript("markers.push(marker);");
-            if(_query)
+            if(_query){
                 browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + country + "', position: myLatLng, }); infowindow.open(map, this);});");
-
+                return country;
+            }else {
+                return null;
+            }
         }else{
-            System.out.println("Geen locaties gevonden");
+            return "Geen locaties gevonden";
         }
     }
-
-
-
 }

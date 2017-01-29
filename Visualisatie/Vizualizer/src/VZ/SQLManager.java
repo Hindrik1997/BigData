@@ -17,7 +17,7 @@ class SQLManager {
             e.printStackTrace();
         }
         try {
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/bigdata", "postgres", "postgres");
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/BigData", "postgres", "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
