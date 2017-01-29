@@ -13,6 +13,12 @@ import java.util.stream.Stream;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+
+/***
+ * Main class of the application. Acts as a controller.
+ * Is also a singleton. Handles the main() function of the application and ties together a lot of stuff.
+ */
 public class Main {
 
     private static Main _instance;
@@ -25,6 +31,9 @@ public class Main {
     private SQLManager _main_model = null;
 
 
+    /**
+     * Main class constructor. Sets the application wide settings and creates a model (SQLManager) and a view (MainView)
+     */
     private Main()
     {
 
@@ -53,38 +62,50 @@ public class Main {
 
     }
 
-
+    /**
+     * Application entry point
+     * @param args are not used
+     */
     public static void main(String[] args)
     {
         _instance = new Main();
     }
 
+    /**
+     * Handles the closing of the database connection.
+     */
     public void closeDatabaseConnection()
     {
         _main_model.close();
     }
 
+    /**
+     * Allows to set the main panel of the view. In this way you can easily set the interior parts of the application and the view of the data,
+     * but keep the control of the JFrame tied to the view class.
+     * @param panel
+     */
     public void setMainJPanel(JPanel panel)
     {
         _main_view.setMainJPanel(panel);
     }
 
+    /**
+     * Executes a query on the backend tied to the application in a safe abstracted way.
+     * @param query the query to execute
+     * @return a ResultSet representing the results of the query.
+     */
     public ResultSet executeQuery(String query)
     {
         return _main_model.executeQuery(query);
     }
 
+    /**
+     * Returns a reference to the JFrame of the application.
+     * @return reference to the JFrame
+     */
     public JFrame getMainFrame()
     {
         return _main_view;
     }
-
-
-
-
-
-
-
-
 
 }

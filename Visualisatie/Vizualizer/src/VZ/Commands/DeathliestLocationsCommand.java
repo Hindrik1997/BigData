@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 26-1-17.
  */
+
+/**
+ * Represents the actions required to show the top 10 deathliest places for actors.
+ */
 public class DeathliestLocationsCommand extends Command {
     @Override
     public void action(ActionEvent actionEvent) {

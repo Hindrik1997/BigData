@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
  * Created by hindrik on 28-1-17.
  * Wrapped code by Jacob and Romeo in class.
  */
+
 public class MapsPanel extends JPanel {
 
     private Browser _browser;

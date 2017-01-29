@@ -10,6 +10,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 28-1-17.
  */
+
+/**
+ * Represents a action which shows the location of actor question
+ */
 public class LocationActor extends Command {
 
     @Override

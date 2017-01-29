@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 27-1-17.
  */
+
+/**
+ * Represent the actions needed for representing the amount of movies with the word beer in the title
+ */
 public class BeerCommand extends Command {
     @Override
     public void action(ActionEvent actionEvent) {

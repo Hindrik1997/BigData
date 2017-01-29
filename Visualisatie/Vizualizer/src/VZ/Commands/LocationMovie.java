@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 28-1-17.
  */
+
+/**
+ * Represents the actions needed for showing the actions needed for showing the movie locations question
+ */
 public class LocationMovie extends Command {
 
     @Override

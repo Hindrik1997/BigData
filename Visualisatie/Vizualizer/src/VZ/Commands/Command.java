@@ -10,8 +10,18 @@ import java.awt.event.ActionListener;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+
+/**
+ * Base class which governs the usage of commands. Provides a way to show a 'processing' message and shows a warning if
+ * anything goes wrong
+ */
 public abstract class Command extends AbstractAction implements ActionListener {
 
+    /**
+     * Catches the event and forwards to the action() function
+     * @param actionEvent action event
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent)
     {
@@ -57,5 +67,10 @@ public abstract class Command extends AbstractAction implements ActionListener {
             }
         });
     }
+
+    /**
+     * Abstract function defining the command that must be executed. Must be overridden in derived classes!
+     * @param actionEvent action event
+     */
     public abstract void action(ActionEvent actionEvent);
 }

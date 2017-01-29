@@ -13,6 +13,10 @@ import java.util.List;
 /**
  * Created by hindrik on 28-1-17.
  */
+
+/**
+ * Represents the actions required to show the connection between amount of seasons and the rating
+ */
 public class VerbandSeasonRatings extends Command {
 
     @Override

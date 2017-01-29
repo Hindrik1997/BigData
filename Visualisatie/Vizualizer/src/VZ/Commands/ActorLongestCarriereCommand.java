@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+/**
+ * Represents the actions needed for showing the actors with the longest movie carrieres.
+ */
 public class ActorLongestCarriereCommand extends Command {
 
     @Override

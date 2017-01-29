@@ -7,6 +7,10 @@ import java.awt.event.ActionEvent;
 /**
  * Created by hindrik on 25-1-17.
  */
+
+/**
+ * Returns back to the main menu
+ */
 public class MainMenuCommand extends Command {
 
     @Override
