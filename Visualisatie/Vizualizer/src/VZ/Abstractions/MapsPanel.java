@@ -28,14 +28,17 @@ public class MapsPanel extends JPanel {
     private Browser _browser;
     private BrowserView _browser_view;
     private File _html;
-    private boolean _query = true;
+    private boolean _queryBool = true;
 
-
-    public MapsPanel(boolean query)
+    /**
+     * Provides an easy way to show locations on a map.
+     * @param queryBool
+     */
+    public MapsPanel(boolean queryBool)
     {
         _browser = new Browser();
         _browser_view = new BrowserView(_browser);
-        _query = query;
+        _queryBool = queryBool;
 
         _html = new File("maps.html");
         _browser.loadURL(_html.getAbsolutePath());
@@ -43,12 +46,15 @@ public class MapsPanel extends JPanel {
         init();
     }
 
+    /**
+     * Initializer
+     */
     void init()
     {
         JTextArea results = new JTextArea(6, 30);
-        JTextField searchMovie = new JTextField();
+        JTextField search = new JTextField();
         JScrollPane resultsScroll = new JScrollPane(results);
-        searchMovie.setColumns(30);
+        search.setColumns(30);
         results.setEditable(false);
 
         JButton searchButton = new JButton("Zoeken");
@@ -56,23 +62,23 @@ public class MapsPanel extends JPanel {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent ae) {
                 clearMarkers(_browser);
-                String movie = searchMovie.getText();
+                String searchText = search.getText();
                 int countRows = 0;
                 String addText = "";
                 
-                if (_query){
+                if (_queryBool){
                     results.setText("In deze landen heeft deze film zich afgespeeld: \n");
                 }
 
-                if (movie != null){
+                if (searchText != null){
                     //locaties bij film ophalen
-                    ResultSet rs = getLocationsFromMovie(movie);
+                    ResultSet rs = getLocationsFromMovie(searchText);
                     if (rs != null){
                         try {
                             //door resultaten lopen
                             while(rs.next( ))
                             {
-                                if(_query){
+                                if(_queryBool){
                                     String country = createMarker(_browser, rs.getString(1));
                                     if (!results.getText().contains(country))
                                     {
@@ -102,7 +108,7 @@ public class MapsPanel extends JPanel {
                         System.out.println("er gaat iets fout");
                     }
                     
-                    if (!_query){
+                    if (!_queryBool){
                         results.setText("Er zijn " + countRows + " acteurs met deze naam:" + "\n");
                         results.append(addText);
                     }
@@ -113,7 +119,7 @@ public class MapsPanel extends JPanel {
         });
 
         JPanel toolBar = new JPanel();
-        toolBar.add(searchMovie);
+        toolBar.add(search);
         toolBar.add(searchButton);
         toolBar.add(resultsScroll);
 
@@ -124,33 +130,62 @@ public class MapsPanel extends JPanel {
         setVisible(true);
     }
 
-    public ResultSet getLocationsFromMovie(String movie){
-        String SQL = switchQuery(_query, movie);
+    /**
+     * Excutes SQL query.
+     * @param searchText record to search to.
+     * @return results from query.
+     */
+    public ResultSet getLocationsFromMovie(String searchText){
+        String SQL = switchQuery(_queryBool, searchText);
         return Main.getInstance().executeQuery(SQL);
     }
 
+    /**
+     * Clears markers.
+     * @param browser browser to use.
+     */
     public void clearMarkers (Browser browser){
         browser.executeJavaScript("for (var i = 0; i < markers.length; i++) { markers[i].setMap(null);}");
         browser.executeJavaScript("var markers = [];");
     }
 
+    /**
+     * Sets marker.
+     * @param browser browser to use.
+     */
     public void setMarkers (Browser browser){
         browser.executeJavaScript("for (var i = 0; i < markers.length; i++) { markers[i].setMap(map);}");
     }
 
+    /**
+     * Zoom out until all markers are visible.
+     * @param browser browser to use.
+     */
     public void zoomOutVisibleMarkers(Browser browser){
         browser.executeJavaScript("var bounds = new google.maps.LatLngBounds();");
         browser.executeJavaScript("for (var i = 0; i < markers.length; i++) {bounds.extend(markers[i].getPosition());}");
         browser.executeJavaScript("map.fitBounds(bounds);");
     }
 
-    public String switchQuery(boolean query, String par){
-        if(query)
-            return "SELECT L.location FROM final.location L INNER JOIN final.movie_location ML ON L.location_id=ML.location_id INNER JOIN final.movie M ON ML.movie_id = M.movie_id WHERE m.title = '" + par + "';";
+    /**
+     * Switch to right query based on bool.
+     * @param queryBool bool to switch query.
+     * @param searchText record to search to.
+     * @return query to use.
+     */
+    public String switchQuery(boolean queryBool, String searchText){
+        if(queryBool)
+            return "SELECT L.location FROM final.location L INNER JOIN final.movie_location ML ON L.location_id=ML.location_id INNER JOIN final.movie M ON ML.movie_id = M.movie_id WHERE m.title = '" + searchText + "';";
         else
-            return "SELECT birth_location, actor_name FROM final.actors WHERE actors.actor_name LIKE '%" + par + "%' AND actors.birth_location IS NOT NULL;";
+            return "SELECT birth_location, actor_name FROM final.actors WHERE actors.actor_name LIKE '%" + searchText + "%' AND actors.birth_location IS NOT NULL;";
     }
 
+    /**
+     * Create marker based on location.
+     * @param browser
+     * @param location
+     * @return country of location.
+     */
     public String createMarker(Browser browser, String location){
         //regex voor locatie ()
         Pattern p = Pattern.compile("(.*)\\((?:.+)\\)(.*)");
@@ -181,7 +216,7 @@ public class MapsPanel extends JPanel {
             browser.executeJavaScript("var marker = new google.maps.Marker({ position: myLatLng, map: map, clickable: true});");
             
             browser.executeJavaScript("markers.push(marker);");
-            if(_query){
+            if(_queryBool){
                 browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + country + "', position: myLatLng, }); infowindow.open(map, this);});");
                 return country;
             }
