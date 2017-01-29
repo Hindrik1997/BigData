@@ -119,11 +119,18 @@ public class MapsPanel extends JPanel {
             }
         });
 
-        JPanel toolBar = new JPanel();
-        toolBar.add(searchMovie);
-        toolBar.add(searchButton);
+        JPanel toolBar = new JPanel(new GridLayout(0,2));
+        JPanel left = new JPanel();
+        left.add(searchMovie);
+        left.add(searchButton);
+
+        String _question_false = "<html>Maak een kaart (b.v. google maps/ <br>openstreetview) met gebooorteplaatsen van acteurs. Zodat op de kaart<br> te zien is wie waar geboren is.";
+        String _question_true = "<html>Maak een kaart (b.v. google maps / <br>openstreetview) met landen waar een flim speelt. Zodat op de kaart<br> te zien is waar de films spelen.";
+        JLabel label = new JLabel(_query ? _question_true : _question_false);
+        left.add(label);
+        toolBar.add(left);
+
         toolBar.add(resultsScroll);
-//        toolBar.add(switchButton);
 
         setLayout(new BorderLayout());
         add(_browser_view, BorderLayout.CENTER);
