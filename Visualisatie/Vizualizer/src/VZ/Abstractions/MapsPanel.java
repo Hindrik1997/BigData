@@ -13,10 +13,8 @@ import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +41,6 @@ public class MapsPanel extends JPanel {
         _browser.loadURL(_html.getAbsolutePath());
 
         init();
-
     }
 
     void init()
@@ -54,17 +51,6 @@ public class MapsPanel extends JPanel {
         searchMovie.setColumns(30);
         results.setEditable(false);
 
-//        JButton switchButton = new JButton("Movie location");
-//        switchButton.addActionListener(ae -> {
-//            _query = !_query;
-//            if(_query){
-//                switchButton.setText("Movie location");
-//            }
-//            else{
-//                switchButton.setText("Actor birthlocation");
-//            }
-//        });
-
         JButton searchButton = new JButton("Zoeken");
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -72,6 +58,7 @@ public class MapsPanel extends JPanel {
                 clearMarkers(_browser);
                 String movie = searchMovie.getText();
                 int countRows = 0;
+                String addText = "";
                 
                 if (_query){
                     results.setText("In deze landen heeft deze film zich afgespeeld: \n");
@@ -86,16 +73,18 @@ public class MapsPanel extends JPanel {
                             while(rs.next( ))
                             {
                                 if(_query){
-                                    results.append(createMarker(_browser, rs.getString(1))+ "\n");
+                                    String country = createMarker(_browser, rs.getString(1));
+                                    if (!results.getText().contains(country))
+                                    {
+                                        results.append(country + "\n");
+                                    }
                                 }
                                 else
                                 {
                                     countRows++;
-                                    createMarker(_browser, rs.getString(1));
+                                    addText += String.format("%-40s%s" , rs.getString(2), createMarker(_browser, rs.getString(1)) ) + "\n";
                                     _browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + rs.getString(2) + "', position: myLatLng, }); infowindow.open(map, this);});");
                                 }
-                                System.out.println("1 " + rs.getString(1));
-                                //System.out.println("2 " + rs.getString(2));
 
                                 try {
                                     Thread.sleep(1000);
@@ -103,15 +92,19 @@ public class MapsPanel extends JPanel {
                                     Thread.currentThread().interrupt();
                                 }
                             }
-                        } catch (SQLException err){
-
+                        } 
+                        catch (SQLException err)
+                        {
+                            
                         }
-                    }else{
+                    }
+                    else{
                         System.out.println("er gaat iets fout");
                     }
                     
                     if (!_query){
-                        results.setText("Er zijn " + countRows + " acteurs met deze naam");
+                        results.setText("Er zijn " + countRows + " acteurs met deze naam:" + "\n");
+                        results.append(addText);
                     }
                     setMarkers(_browser);
                     zoomOutVisibleMarkers(_browser);
@@ -123,7 +116,6 @@ public class MapsPanel extends JPanel {
         toolBar.add(searchMovie);
         toolBar.add(searchButton);
         toolBar.add(resultsScroll);
-//        toolBar.add(switchButton);
 
         setLayout(new BorderLayout());
         add(_browser_view, BorderLayout.CENTER);
@@ -133,12 +125,11 @@ public class MapsPanel extends JPanel {
     }
 
     public ResultSet getLocationsFromMovie(String movie){
-            String SQL = switchQuery(_query, movie);
-            return Main.getInstance().executeQuery(SQL);
+        String SQL = switchQuery(_query, movie);
+        return Main.getInstance().executeQuery(SQL);
     }
 
     public void clearMarkers (Browser browser){
-
         browser.executeJavaScript("for (var i = 0; i < markers.length; i++) { markers[i].setMap(null);}");
         browser.executeJavaScript("var markers = [];");
     }
@@ -184,20 +175,21 @@ public class MapsPanel extends JPanel {
                     country = results[0].addressComponents[i].longName;
                 }
             }
+            
             browser.executeJavaScript("var myLatLng = {lat: " + results[0].geometry.location.lat + ", lng: " + results[0].geometry.location.lng + "};");
             browser.executeJavaScript("var map = new google.maps.Map(document.getElementById('map-canvas'), {zoom: 12, center: myLatLng});");
             browser.executeJavaScript("var marker = new google.maps.Marker({ position: myLatLng, map: map, clickable: true});");
-            //browser.executeJavaScript("var lookup = []; lookup.push([lat, lang]); var search = [lat, lang");
-            //boolean isLocationFree = browser.executeJavaScriptAndReturnValue("for (var i = 0, l = lookup.length; i < l; i++) {    if (lookup[i][0] === search[0] && lookup[i][1] === search[1]) {      return false;    }  }  return true;").getBooleanValue();
-
+            
             browser.executeJavaScript("markers.push(marker);");
             if(_query){
                 browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + country + "', position: myLatLng, }); infowindow.open(map, this);});");
                 return country;
-            }else {
-                return null;
             }
-        }else{
+            else {
+                return results[0].formattedAddress;
+            }
+        }
+        else{
             return "Geen locaties gevonden";
         }
     }
