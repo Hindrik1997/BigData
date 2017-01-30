@@ -190,8 +190,8 @@ public class MapsPanel extends JPanel {
 
     /**
      * Create marker based on location.
-     * @param browser
-     * @param location
+     * @param browser browers to use.
+     * @param location location to place marker on.
      * @return country of location.
      */
     public String createMarker(Browser browser, String location){
