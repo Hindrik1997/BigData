@@ -72,7 +72,7 @@ public class MapsPanel extends JPanel {
 
                 if (searchText != null){
                     //locaties bij film ophalen
-                    ResultSet rs = getLocationsFromMovie(searchText);
+                    ResultSet rs = executeQuery(searchText);
                     if (rs != null){
                         try {
                             //door resultaten lopen
@@ -91,8 +91,6 @@ public class MapsPanel extends JPanel {
                                     addText += String.format("%-40s%s" , rs.getString(2), createMarker(_browser, rs.getString(1)) ) + "\n";
                                     _browser.executeJavaScript("google.maps.event.addListener(markers[markers.length - 1] , 'click', function(){ var infowindow = new google.maps.InfoWindow({ content:'" + rs.getString(2) + "', position: myLatLng, }); infowindow.open(map, this);});");
                                 }
-                                System.out.println("1 " + rs.getString(1));
-                                //System.out.println("2 " + rs.getString(2));
 
                                 try {
                                     Thread.sleep(1000);
@@ -141,11 +139,11 @@ public class MapsPanel extends JPanel {
     }
 
     /**
-     * Excutes SQL query.
+     * Executes SQL query.
      * @param searchText record to search to.
      * @return results from query.
      */
-    public ResultSet getLocationsFromMovie(String searchText){
+    public ResultSet executeQuery(String searchText){
         String SQL = switchQuery(_queryBool, searchText);
         return Main.getInstance().executeQuery(SQL);
     }
