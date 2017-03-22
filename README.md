@@ -1,1 +1,1 @@
-# BigData
+# BigData project for NHL Hogeschool
